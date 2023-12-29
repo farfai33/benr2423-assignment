@@ -5,6 +5,7 @@ const uri = "mongodb+srv://b022210217:Meg04fEK7vmuXK0h@class0.qzwsbgr.mongodb.ne
 const express = require('express')
 const app = express()
 const port = process.env.PORT || 3000;
+const bcrypt = require('bcrypt');
 
 app.use(express.json())
 // Create a MongoClient with a MongoClientOptions object to set the Stable API version
