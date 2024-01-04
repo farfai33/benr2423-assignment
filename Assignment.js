@@ -38,6 +38,15 @@ app.post('/login', (req, res) => {
 }
 
 app.post('/add/user', (req, res) => {
+  client.db("Assignment").collection("Users").insertOne({
+    "username": req.body.username,
+    "password": req.body.password,
+    "student_id": req.body.student_id,
+    "email": req.body.email,
+    "staff_id": req.body.staff_id,
+    "role": req.body.role,
+    "phone": req.body.phone,
+  })
 }
 
 app.post('/add/faculty', (req, res) => {
