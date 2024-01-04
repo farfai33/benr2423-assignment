@@ -32,40 +32,53 @@ async function run() {
 run().catch(console.dir);
 
 app.post('/record', (req, res) => {
-}
+})
 
 app.post('/login', (req, res) => {
-}
+})
 
-app.post('/add/user', (req, res) => {
+app.post('/Create User/Students', (req, res) => {
   client.db("Assignment").collection("Users").insertOne({
     "username": req.body.username,
     "password": req.body.password,
     "student_id": req.body.student_id,
     "email": req.body.email,
-    "staff_id": req.body.staff_id,
-    "role": req.body.role,
+    "role": "Student",
     "phone": req.body.phone,
+    "PA": req.body.PA, //Pensyarah Akademik
   })
-}
+})
 
-app.post('/add/faculty', (req, res) => {
-}
+app.post('/Create User/Staff', (req, res) => {
+  client.db("Assignment").collection("Users").insertOne({
+    "username": req.body.username,
+    "password": req.body.password,
+    "staff_id": req.body.staff_id,
+    "phone": req.body.phone,
+    "role": "Staff",
+})
+
+app.post('/Create User/Admin', (req, res) => {
+  "username": req.body.username,
+  "password": req.body.password,
+  "phone": req.body.phone,
+  "role": "Admin",
+})
 
 app.delete('/', (req, res) => {
-}
+})
 
 app.get('/student', (req, res) => {
-}
+})
 
 app.get('/attendance-details', (req, res) => {
-}
+})
 
 app.get('/report', (req, res) => {
-}
+})
 
 app.get('/logout', (req, res) => {  
-}
+})
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)
