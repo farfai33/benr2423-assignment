@@ -37,7 +37,7 @@ app.post('/record', (req, res) => {
 app.post('/login', (req, res) => {
 }
 
-app.post('/add/student', (req, res) => {
+app.post('/add/user', (req, res) => {
 }
 
 app.post('/add/faculty', (req, res) => {
