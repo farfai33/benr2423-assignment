@@ -37,6 +37,15 @@ app.post('/record', (req, res) => {
 app.post('/login', (req, res) => {
 }
 
+app.get('/student', (req, res) => {
+}
+
+app.get('/report', (req, res) => {
+}
+
+app.get('/logout', (req, res) => {  
+}
+
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)
 })
