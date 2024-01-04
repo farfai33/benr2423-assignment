@@ -37,7 +37,19 @@ app.post('/record', (req, res) => {
 app.post('/login', (req, res) => {
 }
 
+app.post('/add/student', (req, res) => {
+}
+
+app.post('/add/faculty', (req, res) => {
+}
+
+app.delete('/', (req, res) => {
+}
+
 app.get('/student', (req, res) => {
+}
+
+app.get('/attendance-details', (req, res) => {
 }
 
 app.get('/report', (req, res) => {
