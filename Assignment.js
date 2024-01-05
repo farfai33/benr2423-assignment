@@ -37,32 +37,41 @@ app.post('/record', (req, res) => {
 app.post('/login', (req, res) => {
 })
 
-app.post('/Create User/Students', (req, res) => {
-  client.db("Assignment").collection("Users").insertOne({
-    "username": req.body.username,
-    "password": req.body.password,
-    "student_id": req.body.student_id,
-    "email": req.body.email,
-    "role": "Student",
-    "phone": req.body.phone,
-    "PA": req.body.PA, //Pensyarah Akademik
-  })
+app.post('/create-user/students', async (req, res) => {
+  const { username, password, student_id, email, role, phone, PA } = req.body;
+
+  try {
+    await createStudent(username, password, student_id, email, role, phone, PA);
+    res.status(201).send("User created successfully");
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Internal Server Error");
+  }
+});
+
+app.post('/create-user/staff', async (req, res) => {
+  const { username, password, staff_id, email, role, phone } = req.body;
+
+  try {
+    await createStaff(username, password, staff_id, email, role, phone);
+    res.status(201).send("User created successfully");
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Internal Server Error");
+  }
 })
 
-app.post('/Create User/Staff', (req, res) => {
-  client.db("Assignment").collection("Users").insertOne({
-    "username": req.body.username,
-    "password": req.body.password,
-    "staff_id": req.body.staff_id,
-    "phone": req.body.phone,
-    "role": "Staff",
-})
+app.post('/create-user/admin', async (req, res) => {
+  const { username, password, email, role, phone} = req.body;
 
-app.post('/Create User/Admin', (req, res) => {
-  "username": req.body.username,
-  "password": req.body.password,
-  "phone": req.body.phone,
-  "role": "Admin",
+  try {
+    await createAdmin(username, password, email, role, phone);
+    res.status(201).send("User created successfully");
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Internal Server Error");
+  }
+
 })
 
 app.delete('/', (req, res) => {
@@ -83,3 +92,72 @@ app.get('/logout', (req, res) => {
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)
 })
+
+async function createStudent(Username, Password, StudentId, Email, Role, Phone, PA) {
+  try {
+    const database = client.db('AttendanceSystem');
+    const collection = database.collection('Users');
+
+    // Create a user object
+    const user = {
+      username: Username,
+      password: Password,
+      student_id: StudentId,
+      email: Email,
+      role: Role,
+      phone: Phone,
+      PA: PA,
+    };
+    // Insert the user object into the collection
+    await collection.insertOne(user);
+
+    console.log("User created successfully");
+  } catch (error) {
+    console.error("Error creating user:", error);
+  }
+}
+
+async function createStaff(Username, Password, StaffId, Email, Role, Phone) {
+  try {
+    const database = client.db('AttendanceSystem');
+    const collection = database.collection('Users');
+
+    // Create a user object
+    const user = {
+      username: Username,
+      password: Password,
+      staff_id: StaffId,
+      email: Email,
+      role: Role,
+      phone: Phone
+    };
+    // Insert the user object into the collection
+    await collection.insertOne(user);
+
+    console.log("User created successfully");
+  } catch (error) {
+    console.error("Error creating user:", error);
+  }
+}
+
+async function createAdmin(Username, Password, Email, Role, Phone) {
+  try {
+    const database = client.db('AttendanceSystem');
+    const collection = database.collection('Users');
+
+    // Create a user object
+    const user = {
+      username: Username,
+      password: Password,
+      email: Email,
+      role: Role,
+      phone: Phone
+    };
+    // Insert the user object into the collection
+    await collection.insertOne(user);
+
+    console.log("User created successfully");
+  } catch (error) {
+    console.error("Error creating user:", error);
+  }
+}
