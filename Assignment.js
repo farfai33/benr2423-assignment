@@ -75,6 +75,7 @@ app.post('/create-user/admin', async (req, res) => {
 })
 
 app.delete('/', (req, res) => {
+  res.status(200).send('Data has been deleted');
 })
 
 app.get('/student', (req, res) => {
