@@ -74,8 +74,24 @@ app.post('/create-user/admin', async (req, res) => {
 
 })
 
-app.delete('/', (req, res) => {
-  res.status(200).send('Data has been deleted');
+app.delete('/delete-student/:student_id', authenticate, async (req, res) => {
+  const studentID = req.params.student_id;
+  try{
+    const student = await findStudentById(studentID);
+    if (!student){
+      return res.status(404).send('Student not found');
+    }
+    const result = await deleteStudent(studentID);
+    if (result.deletedCount > 0) {
+      res.status(200).send('Student data has been deleted');
+  }
+  else {
+    res.status(500).send('Failed to delete student data');
+  }
+  catch (error) {
+    console.error("Error deleting student data:", error);
+    res.status(500).send('Internal Server Error');
+  }
 })
 
 app.get('/student', (req, res) => {
