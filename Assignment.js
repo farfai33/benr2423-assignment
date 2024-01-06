@@ -87,7 +87,8 @@ app.get('/attendance-details', (req, res) => {
 app.get('/report', (req, res) => {
 })
 
-app.get('/logout', (req, res) => {  
+app.get('/logout', (req, res) => { 
+  res.status(200).send('Logout successfuly'); 
 })
 
 app.listen(port, () => {
