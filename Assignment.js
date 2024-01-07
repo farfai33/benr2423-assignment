@@ -37,17 +37,33 @@ app.post('/record', (req, res) => {
 app.post('/login', (req, res) => {
 })
 
-app.post('/create-user/students', async (req, res) => {
-  const { username, password, student_id, email, role, phone, PA } = req.body;
-
+app.post('/admin/create-user/students', async (req, res) => {
   try {
-    await createStudent(username, password, student_id, email, role, phone, PA);
-    res.status(201).send("User created successfully");
+    const { username, password, student_id, email, phone, PA } = req.body;
+
+    // Check if the username already exists
+    const existingUser = await client
+      .db('AttendanceSystem')
+      .collection('Users')
+      .find({ "username": { $eq: username } })
+      .toArray();
+
+    if (existingUser.length > 0) {
+      // If a user with the same username already exists, return a 400 response
+      console.log(existingUser);
+      return res.status(400).send('Username already exists');
+    }
+
+    const hashedPassword = await bcrypt.hash(password, 10);
+    // If the username is unique, proceed to create the new student
+    createStudent(username, hashedPassword, student_id, email, phone, PA);
+    return res.status(201).send("User created successfully");
   } catch (error) {
     console.error(error);
-    res.status(500).send("Internal Server Error");
+    return res.status(500).send("Internal Server Error");
   }
-});
+}
+);
 
 app.post('/create-user/staff', async (req, res) => {
   const { username, password, staff_id, email, role, phone } = req.body;
@@ -62,7 +78,7 @@ app.post('/create-user/staff', async (req, res) => {
 })
 
 app.post('/create-user/admin', async (req, res) => {
-  const { username, password, email, role, phone} = req.body;
+  const { username, password, email, role, phone } = req.body;
 
   try {
     await createAdmin(username, password, email, role, phone);
@@ -76,62 +92,65 @@ app.post('/create-user/admin', async (req, res) => {
 
 app.delete('/delete-student/:student_id', authenticate, async (req, res) => {
   const studentID = req.params.student_id;
-  try{
+  try {
     const student = await findStudentById(studentID);
-    if (!student){
+    if (!student) {
       return res.status(404).send('Student not found');
     }
     const result = await deleteStudent(studentID);
     if (result.deletedCount > 0) {
       res.status(200).send('Student data has been deleted');
-  }
-  else {
-    res.status(500).send('Failed to delete student data');
+    }
+    else {
+      res.status(500).send('Failed to delete student data');
+    }
   }
   catch (error) {
     console.error("Error deleting student data:", error);
     res.status(500).send('Internal Server Error');
   }
-})
+}
+);
 
 app.get('/student', (req, res) => {
-})
+});
 
 app.get('/attendance-details', (req, res) => {
-})
+});
 
 app.get('/report', (req, res) => {
-})
+});
 
-app.get('/logout', (req, res) => { 
-  res.status(200).send('Logout successfuly'); 
-})
+app.get('/logout', (req, res) => {
+  res.status(200).send('Logout successfuly');
+});
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)
-})
+});
 
-async function createStudent(Username, Password, StudentId, Email, Role, Phone, PA) {
+async function createStudent(Username, Password, StudentId, Email, Phone, PA) {
   try {
-    const database = client.db('AttendanceSystem');
-    const collection = database.collection('Users');
+      const database = client.db('AttendanceSystem');
+      const collection = database.collection('Users');
 
-    // Create a user object
-    const user = {
-      username: Username,
-      password: Password,
-      student_id: StudentId,
-      email: Email,
-      role: Role,
-      phone: Phone,
-      PA: PA,
-    };
-    // Insert the user object into the collection
-    await collection.insertOne(user);
+      // Create a user object
+      const user = {
+          username: Username,
+          password: Password,
+          student_id: StudentId,
+          email: Email,
+          role: "Student",
+          phone: Phone,
+          PA: PA,
+      };
 
-    console.log("User created successfully");
-  } catch (error) {
-    console.error("Error creating user:", error);
+      // Insert the user object into the collection
+      await collection.insertOne(user);
+      console.log("User created successfully");
+  }
+  catch (error) {
+      console.error("Error creating user:", error);
   }
 }
 
