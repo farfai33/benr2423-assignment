@@ -31,8 +31,18 @@ async function run() {
 }
 run().catch(console.dir);
 
-app.post('/record', (req, res) => {
-})
+app.post('/students/record', (req, res) => {
+  const { student_id, date, status } = req.body;
+  try {
+    recordattendance(student_id, date, status);
+    return
+    res.status(201).send("Attendance recorded successfully");
+  } catch (error) {
+
+    console.error(error);
+    return res.status(500).send("Internal Server Error");
+  }
+});
 
 app.post('/login', (req, res) => {
 })
@@ -129,6 +139,26 @@ app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)
 });
 
+async function recordattendance(StudentId, Date, Status) {
+  try {
+      const database = client.db('AttendanceSystem');
+      const collection = database.collection('Attendance');
+
+      // Create a user object
+      const attendance = {
+          student_id: StudentId,
+          date: Date,
+          status: Status
+      };
+      // Insert the user object into the collection
+      await collection.insertOne(attendance);
+      console.log("Attendance recorded successfully");
+  } 
+  catch (error) {
+      console.error("Error recording attendance:",error);
+  }
+}
+
 async function createStudent(Username, Password, StudentId, Email, Phone, PA) {
   try {
       const database = client.db('AttendanceSystem');
@@ -196,5 +226,33 @@ async function createAdmin(Username, Password, Email, Role, Phone) {
     console.log("User created successfully");
   } catch (error) {
     console.error("Error creating user:", error);
+  }
+}
+
+async function findStudentById(studentId) {
+  try {
+    const database = client.db('AttendanceSystem');
+    const collection = database.collection('Users');
+
+    // Find the student based on their student_id
+    const student = await collection.findOne({ student_id: studentId });
+    return student;
+  } catch (error) {
+    console.error("Error finding student:", error);
+    throw error;
+  }
+}
+
+async function deleteStudent(studentId) {
+  try {
+    const database = client.db('AttendanceSystem');
+    const collection = database.collection('Users');
+
+    // Delete the student based on their student_id
+    const result = await collection.deleteOne({ student_id: studentId });
+    return result;
+  } catch (error) {
+    console.error("Error deleting student:", error);
+    throw error;
   }
 }
