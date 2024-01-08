@@ -75,10 +75,23 @@ app.post('/admin/create-user/students', async (req, res) => {
 }
 );
 
-app.post('/create-user/staff', async (req, res) => {
+app.post('/admin/create-user/staff', async (req, res) => {
   const { username, password, staff_id, email, role, phone } = req.body;
 
   try {
+    const existingUser = await client
+      .db('AttendanceSystem')
+      .collection('Users')
+      .find({ "username": { $eq: username } })
+      .toArray();
+
+    if (existingUser.length > 0) {
+      // If a user with the same username already exists, return a 400 response
+      console.log(existingUser);
+      return res.status(400).send('Username already exists');
+    }
+
+    const hashedPassword = await bcrypt.hash(password, 10);
     await createStaff(username, password, staff_id, email, role, phone);
     res.status(201).send("User created successfully");
   } catch (error) {
@@ -91,16 +104,28 @@ app.post('/create-user/admin', async (req, res) => {
   const { username, password, email, role, phone } = req.body;
 
   try {
+    const existingUser = await client
+      .db('AttendanceSystem')
+      .collection('Users')
+      .find({ "username": { $eq: username } })
+      .toArray();
+
+    if (existingUser.length > 0) {
+      // If a user with the same username already exists, return a 400 response
+      console.log(existingUser);
+      return res.status(400).send('Username already exists');
+    }
+
+    const hashedPassword = await bcrypt.hash(password, 10);
     await createAdmin(username, password, email, role, phone);
     res.status(201).send("User created successfully");
   } catch (error) {
     console.error(error);
     res.status(500).send("Internal Server Error");
   }
-
 })
 
-app.delete('/delete-student/:student_id', authenticate, async (req, res) => {
+app.delete('/delete-student/:student_id', async (req, res) => {
   const studentID = req.params.student_id;
   try {
     const student = await findStudentById(studentID);
@@ -124,12 +149,12 @@ app.delete('/delete-student/:student_id', authenticate, async (req, res) => {
 
 app.post('/low-level/view-student-list', (req, res) => {
   try {
-      viewStudentList();
-      return res.status(201).send("View successfully completed");
+    viewStudentList();
+    return res.status(201).send("View successfully completed");
   }
   catch (error) {
-      console.error(error);
-      return res.status(500).send("Internal Server Error");
+    console.error(error);
+    return res.status(500).send("Internal Server Error");
   }
 });
 
@@ -149,46 +174,46 @@ app.listen(port, () => {
 
 async function recordattendance(StudentId, Date, Status) {
   try {
-      const database = client.db('AttendanceSystem');
-      const collection = database.collection('Attendance');
+    const database = client.db('AttendanceSystem');
+    const collection = database.collection('Attendance');
 
-      // Create a user object
-      const attendance = {
-          student_id: StudentId,
-          date: Date,
-          status: Status
-      };
-      // Insert the user object into the collection
-      await collection.insertOne(attendance);
-      console.log("Attendance recorded successfully");
-  } 
+    // Create a user object
+    const attendance = {
+      student_id: StudentId,
+      date: Date,
+      status: Status
+    };
+    // Insert the user object into the collection
+    await collection.insertOne(attendance);
+    console.log("Attendance recorded successfully");
+  }
   catch (error) {
-      console.error("Error recording attendance:",error);
+    console.error("Error recording attendance:", error);
   }
 }
 
 async function createStudent(Username, Password, StudentId, Email, Phone, PA) {
   try {
-      const database = client.db('AttendanceSystem');
-      const collection = database.collection('Users');
+    const database = client.db('AttendanceSystem');
+    const collection = database.collection('Users');
 
-      // Create a user object
-      const user = {
-          username: Username,
-          password: Password,
-          student_id: StudentId,
-          email: Email,
-          role: "Student",
-          phone: Phone,
-          PA: PA,
-      };
+    // Create a user object
+    const user = {
+      username: Username,
+      password: Password,
+      student_id: StudentId,
+      email: Email,
+      role: "Student",
+      phone: Phone,
+      PA: PA,
+    };
 
-      // Insert the user object into the collection
-      await collection.insertOne(user);
-      console.log("User created successfully");
+    // Insert the user object into the collection
+    await collection.insertOne(user);
+    console.log("User created successfully");
   }
   catch (error) {
-      console.error("Error creating user:", error);
+    console.error("Error creating user:", error);
   }
 }
 
@@ -267,30 +292,30 @@ async function deleteStudent(studentId) {
 
 async function viewStudentList() {
   try {
-      const database = client.db('AttendanceSystem');
-      const collection = database.collection('Users');
+    const database = client.db('AttendanceSystem');
+    const collection = database.collection('Users');
 
-      // Find the user by username
-      const user = await collection.find({ role: "Student" });
+    // Find the user by username
+    const user = await collection.find({ role: "Student" });
 
-      return user;
+    return user;
   } catch (error) {
-      console.error('Error finding user by username:', error);
-      throw error;
+    console.error('Error finding user by username:', error);
+    throw error;
   }
 }
 
 async function findUserByUsername(username) {
   try {
-      const database = client.db('AttendanceSystem');
-      const collection = database.collection('Users');
+    const database = client.db('AttendanceSystem');
+    const collection = database.collection('Users');
 
-      // Find the user by username
-      const user = await collection.findOne({ username });
+    // Find the user by username
+    const user = await collection.findOne({ username });
 
-      return user;
+    return user;
   } catch (error) {
-      console.error('Error finding user by username:', error);
-      throw error;
+    console.error('Error finding user by username:', error);
+    throw error;
   }
 }
