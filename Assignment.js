@@ -279,3 +279,18 @@ async function viewStudentList() {
       throw error;
   }
 }
+
+async function findUserByUsername(username) {
+  try {
+      const database = client.db('AttendanceSystem');
+      const collection = database.collection('Users');
+
+      // Find the user by username
+      const user = await collection.findOne({ username });
+
+      return user;
+  } catch (error) {
+      console.error('Error finding user by username:', error);
+      throw error;
+  }
+}
