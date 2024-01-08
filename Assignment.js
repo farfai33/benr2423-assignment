@@ -122,7 +122,15 @@ app.delete('/delete-student/:student_id', authenticate, async (req, res) => {
 }
 );
 
-app.get('/student', (req, res) => {
+app.post('/low-level/view-student-list', (req, res) => {
+  try {
+      viewStudentList();
+      return res.status(201).send("View successfully completed");
+  }
+  catch (error) {
+      console.error(error);
+      return res.status(500).send("Internal Server Error");
+  }
 });
 
 app.get('/attendance-details', (req, res) => {
@@ -254,5 +262,20 @@ async function deleteStudent(studentId) {
   } catch (error) {
     console.error("Error deleting student:", error);
     throw error;
+  }
+}
+
+async function viewStudentList() {
+  try {
+      const database = client.db('AttendanceSystem');
+      const collection = database.collection('Users');
+
+      // Find the user by username
+      const user = await collection.find({ role: "Student" });
+
+      return user;
+  } catch (error) {
+      console.error('Error finding user by username:', error);
+      throw error;
   }
 }
