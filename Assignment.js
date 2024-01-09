@@ -6,6 +6,7 @@ const express = require('express')
 const app = express()
 const port = process.env.PORT || 3000;
 const bcrypt = require('bcrypt');
+var jwt = require('jsonwebtoken');
 
 app.use(express.json())
 // Create a MongoClient with a MongoClientOptions object to set the Stable API version
@@ -35,7 +36,6 @@ app.post('/students/record', (req, res) => {
   const { student_id, date, status } = req.body;
   try {
     recordattendance(student_id, date, status);
-    return
     res.status(201).send("Attendance recorded successfully");
   } catch (error) {
 
@@ -92,7 +92,7 @@ app.post('/admin/create-user/staff', async (req, res) => {
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
-    await createStaff(username, password, staff_id, email, role, phone);
+    await createStaff(username, hashedPassword, staff_id, email, role, phone);
     res.status(201).send("User created successfully");
   } catch (error) {
     console.error(error);
@@ -117,7 +117,7 @@ app.post('/create-user/admin', async (req, res) => {
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
-    await createAdmin(username, password, email, role, phone);
+    await createAdmin(username, hashedPassword, email, role, phone);
     res.status(201).send("User created successfully");
   } catch (error) {
     console.error(error);
@@ -147,9 +147,10 @@ app.delete('/delete-student/:student_id', async (req, res) => {
 }
 );
 
-app.post('/low-level/view-student-list', (req, res) => {
+app.get('/low-level/view-student-list', async (req, res) => {
   try {
-    viewStudentList();
+    const list = await viewStudentList();
+    console.log(list);
     return res.status(201).send("View successfully completed");
   }
   catch (error) {
@@ -296,7 +297,7 @@ async function viewStudentList() {
     const collection = database.collection('Users');
 
     // Find the user by username
-    const user = await collection.find({ role: "Student" });
+    const user = await collection.find({ role: {$eq:"Student"} }).toArray();
 
     return user;
   } catch (error) {
