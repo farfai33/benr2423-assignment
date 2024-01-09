@@ -151,6 +151,32 @@ app.post('/admin/create-faculty', async (req, res) => {
   }
 });
 
+app.post('/admin/create-faculty', async (req, res) => {
+  try {
+    const { name, code, program, students, session } = req.body;
+    
+    // Check if the username already exists
+    const existingFaculty = await client
+    .db('AttendanceSystem')
+    .collection('Faculties')
+    .find({ "code": { $eq: code } })
+    .toArray();
+    
+    if (existingFaculty.length > 0) {
+      // If a user with the same username already exists, return a 400 response
+      console.log(existingFaculty);
+      return res.status(400).send('Faculty already exists');
+    }
+    
+    // If the username is unique, proceed to create the new student
+    createFaculty(name, code, program, students, session);
+    return res.status(201).send("Faculty created successfully");
+  } catch (error) {
+    console.error(error);
+    return res.status(500).send("Internal Server Error");
+  }
+});
+
 app.delete('/delete-student/:student_id', async (req, res) => {
   const studentID = req.params.student_id;
   try {
@@ -309,6 +335,29 @@ async function createFaculty(Name, Code, Programs, Students, Session) {
     } catch (error) {
       console.error("Error creating faculty:", error);
     }
+}
+
+async function createPrograms(Name, Code, Faculty, Subjects, Students, Session) {
+  try {
+    const database = client.db('AttendanceSystem');
+    const collection = database.collection('Programs');
+
+    // Create a user object
+    const program = {
+      name: Name,
+      code: Code,
+      faculty: Faculty,
+      subject: Subjects,
+      students: Students,
+      session: Session
+    };
+    // Insert the user object into the collection
+    await collection.insertOne(program);
+    
+    console.log("Program created successfully");
+  } catch (error) {
+    console.error("Error creating program:", error);
+  }
 }
 
 async function findStudentById(studentId) {
