@@ -127,7 +127,7 @@ app.post('/create-user/admin', async (req, res) => {
 
 app.post('/admin/create-faculty', async (req, res) => {
   try {
-    const { name, code, program, students } = req.body;
+    const { name, code, program, students, session } = req.body;
     
     // Check if the username already exists
     const existingFaculty = await client
@@ -143,7 +143,7 @@ app.post('/admin/create-faculty', async (req, res) => {
     }
     
     // If the username is unique, proceed to create the new student
-    createFaculty(name, code, program, students);
+    createFaculty(name, code, program, students, session);
     return res.status(201).send("Faculty created successfully");
   } catch (error) {
     console.error(error);
@@ -289,7 +289,7 @@ async function createAdmin(Username, Password, Email, Role, Phone) {
   }
 }
 
-async function createFaculty(Name, Code, Programs, Students) {
+async function createFaculty(Name, Code, Programs, Students, Session) {
   try {
     const database = client.db('AttendanceSystem');
     const collection = database.collection('Faculties');
@@ -300,6 +300,7 @@ async function createFaculty(Name, Code, Programs, Students) {
       code: Code,
       program: Programs,
       students: Students,
+      session: Session
     };
     // Insert the user object into the collection
     await collection.insertOne(faculty);
