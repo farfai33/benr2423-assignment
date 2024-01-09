@@ -151,26 +151,26 @@ app.post('/admin/create-faculty', async (req, res) => {
   }
 });
 
-app.post('/admin/create-faculty', async (req, res) => {
+app.post('/admin/create-program', async (req, res) => {
   try {
-    const { name, code, program, students, session } = req.body;
+    const { name, code, faculty, subject, students, session } = req.body;
     
     // Check if the username already exists
-    const existingFaculty = await client
+    const existingProgram = await client
     .db('AttendanceSystem')
-    .collection('Faculties')
+    .collection('Programs')
     .find({ "code": { $eq: code } })
     .toArray();
     
-    if (existingFaculty.length > 0) {
+    if (existingProgram.length > 0) {
       // If a user with the same username already exists, return a 400 response
-      console.log(existingFaculty);
-      return res.status(400).send('Faculty already exists');
+      console.log(existingProgram);
+      return res.status(400).send('Program already exists');
     }
     
     // If the username is unique, proceed to create the new student
-    createFaculty(name, code, program, students, session);
-    return res.status(201).send("Faculty created successfully");
+    createPrograms(name, code, faculty, subject, students, session);
+    return res.status(201).send("Program created successfully");
   } catch (error) {
     console.error(error);
     return res.status(500).send("Internal Server Error");
