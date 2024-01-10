@@ -199,7 +199,7 @@ app.delete('/delete-student/:student_id', async (req, res) => {
 }
 );
 
-app.get('/low-level/view-student-list', async (req, res) => {
+app.post('/low-level/view-student-list', async (req, res) => {
   try {
     const list = await viewStudentList();
     console.log(list);
@@ -211,7 +211,17 @@ app.get('/low-level/view-student-list', async (req, res) => {
   }
 });
 
-app.get('/attendance-details', (req, res) => {
+app.post('/low-level/view-details', (req, res) => {
+  const { student_id } = req.body;
+
+  try {
+      viewDetails(student_id);
+      return res.status(201).send("Attendance recorded successfully");
+  }
+  catch (error) {
+      console.error(error);
+      return res.status(500).send("Internal Server Error");
+  }
 });
 
 app.get('/report', (req, res) => {
@@ -400,6 +410,20 @@ async function viewStudentList() {
   } catch (error) {
     console.error('Error finding user by username:', error);
     throw error;
+  }
+}
+async function viewDetails(StudentId) {
+  try {
+      const database = client.db('AttendanceSystem');
+      const collection = database.collection('Attendance');
+
+      // Find the user by username
+      const user = await collection.findOne({ StudentId });
+
+      return user;
+  } catch (error) {
+      console.error('Error finding user by username:', error);
+      throw error;
   }
 }
 
