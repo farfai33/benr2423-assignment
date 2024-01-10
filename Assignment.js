@@ -100,31 +100,6 @@ app.post('/admin/create-user/staff', async (req, res) => {
   }
 })
 
-app.post('/create-user/admin', async (req, res) => {
-  const { username, password, email, role, phone } = req.body;
-
-  try {
-    const existingUser = await client
-      .db('AttendanceSystem')
-      .collection('Users')
-      .find({ "username": { $eq: username } })
-      .toArray();
-
-    if (existingUser.length > 0) {
-      // If a user with the same username already exists, return a 400 response
-      console.log(existingUser);
-      return res.status(400).send('Username already exists');
-    }
-
-    const hashedPassword = await bcrypt.hash(password, 10);
-    await createAdmin(username, hashedPassword, email, role, phone);
-    res.status(201).send("User created successfully");
-  } catch (error) {
-    console.error(error);
-    res.status(500).send("Internal Server Error");
-  }
-})
-
 app.post('/admin/create-faculty', async (req, res) => {
   try {
     const { name, code, program, students, session } = req.body;
@@ -312,28 +287,6 @@ async function createStaff(Username, Password, StaffId, Email, Role, Phone) {
       username: Username,
       password: Password,
       staff_id: StaffId,
-      email: Email,
-      role: Role,
-      phone: Phone
-    };
-    // Insert the user object into the collection
-    await collection.insertOne(user);
-
-    console.log("User created successfully");
-  } catch (error) {
-    console.error("Error creating user:", error);
-  }
-}
-
-async function createAdmin(Username, Password, Email, Role, Phone) {
-  try {
-    const database = client.db('AttendanceSystem');
-    const collection = database.collection('Users');
-
-    // Create a user object
-    const user = {
-      username: Username,
-      password: Password,
       email: Email,
       role: Role,
       phone: Phone
