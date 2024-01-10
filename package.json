@@ -2,9 +2,9 @@
   "name": "benr2423-assignment",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "Assignment.js",
   "scripts": {
-    "test": "node index.js"
+    "start": "node Assignment.js"
   },
   "author": "",
   "license": "ISC",
