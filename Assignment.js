@@ -32,6 +32,10 @@ async function run() {
 }
 run().catch(console.dir);
 
+app.get('/', (req, res) => {
+  res.send('Hello World!')
+});
+
 app.post('/students/record', (req, res) => {
   const { student_id, date, status } = req.body;
   try {
