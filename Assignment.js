@@ -177,6 +177,28 @@ app.post('/admin/create-program', async (req, res) => {
   }
 });
 
+app.post('/faculty/create-subject', async (req, res) => {
+  try {
+    const { name, code, credit, faculty, program, session } = req.body;
+    
+    // Check if the username already exists
+    const existingSubject = await existingsubjects(client, code);
+    
+    if (existingSubject.length > 0) {
+      // If a user with the same username already exists, return a 400 response
+      console.log(existingSubject);
+      return res.status(400).send('Subject already exists');
+    }
+    
+    // If the username is unique, proceed to create the new student
+    createSubject(name, code, credit, faculty, program, session);
+    return res.status(201).send("Subject created successfully");
+  } catch (error) {
+    console.error(error);
+    return res.status(500).send("Internal Server Error");
+  }
+});
+
 app.delete('/delete-student/:student_id', async (req, res) => {
   const studentID = req.params.student_id;
   try {
@@ -367,6 +389,29 @@ async function createPrograms(Name, Code, Faculty, Subjects, Students, Session) 
     console.log("Program created successfully");
   } catch (error) {
     console.error("Error creating program:", error);
+  }
+}
+
+async function createSubject(client, Name, Code, Credit, Faculty, Program, Session) {
+  try {
+    const database = client.db('Starting');
+    const collection = database.collection('Subjects');
+    
+    // Create a user object
+    const subject = {
+      name: Name,
+      code: Code,
+      credit: Credit,
+      faculty: Faculty,
+      program: Program,
+      session: Session
+    };
+    // Insert the user object into the collection
+    await collection.insertOne(subject);
+    
+    console.log("Subject created successfully");
+  } catch (error) {
+    console.error("Error creating subject:", error);
   }
 }
 
