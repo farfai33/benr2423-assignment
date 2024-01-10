@@ -157,7 +157,7 @@ app.post('/faculty/create-subject', async (req, res) => {
     const { name, code, credit, faculty, program, session } = req.body;
     
     // Check if the username already exists
-    const existingSubject = await existingsubjects(client, code);
+    const existingSubject = await existingsubjects(code);
     
     if (existingSubject.length > 0) {
       // If a user with the same username already exists, return a 400 response
@@ -438,4 +438,12 @@ async function findUserByUsername(username) {
     console.error('Error finding user by username:', error);
     throw error;
   }
+}
+
+async function existingsubjects(Code) {
+  return await client
+      .db('AttendanceSystem')
+      .collection('Subjects')
+      .find({ "code": { $eq: Code } })
+      .toArray();
 }
