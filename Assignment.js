@@ -392,7 +392,7 @@ async function createPrograms(Name, Code, Faculty, Subjects, Students, Session) 
   }
 }
 
-async function createSubject(client, Name, Code, Credit, Faculty, Program, Session) {
+async function createSubject(Name, Code, Credit, Faculty, Program, Session) {
   try {
     const database = client.db('Starting');
     const collection = database.collection('Subjects');
