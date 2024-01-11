@@ -36,7 +36,7 @@ app.get('/', (req, res) => {
   res.send('Hello World!')
 });
 
-app.post('/students/record', (req, res) => {
+app.post('/students/record', async (req, res) => {
   const { student_id, date, status } = req.body;
   try {
     recordattendance(student_id, date, status);
@@ -200,7 +200,7 @@ app.delete('/delete-student/:student_id', async (req, res) => {
 }
 );
 
-app.post('/low-level/view-student-list', async (req, res) => {
+app.post('/view-student-list', async (req, res) => {
   try {
     const list = await viewStudentList();
     console.log(list);
@@ -212,7 +212,7 @@ app.post('/low-level/view-student-list', async (req, res) => {
   }
 });
 
-app.post('/low-level/view-details', (req, res) => {
+app.post('/view-details', async (req, res) => {
   const { student_id } = req.body;
 
   try {
