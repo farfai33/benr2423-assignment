@@ -36,20 +36,34 @@ app.get('/', (req, res) => {
   res.send('Hello World!')
 });
 
-app.post('/students/record', async (req, res) => {
-  const { student_id, date, status } = req.body;
-  try {
-    recordattendance(student_id, date, status);
-    res.status(201).send("Attendance recorded successfully");
-  } catch (error) {
+app.post('/login', async (req, res) => {
+  console.log('Request received for /login');
+  const { username, password } = req.body;
 
-    console.error(error);
-    return res.status(500).send("Internal Server Error");
+  try {
+      console.log('Attempting to find user by username:', username);
+      const user = await findUserByUsername(username);
+
+      if (!user) {
+          console.log('User not found:', username);
+          return res.status(401).send('Invalid username or password');
+      }
+
+      const passwordMatch = await bcrypt.compare(password, user.password);
+      if (passwordMatch) {
+          console.log('Login successful for user:', username);
+          const token = await generateToken(user);
+          res.send('Login Succesful, your token is \n' + token);
+      } else {
+          console.log('Incorrect password for user:', username);
+          res.status(401).send('Invalid username or password');
+      }
+  }
+  catch (error) {
+      console.error('Error during login:', error);
+      res.status(500).send('Internal Server Error');
   }
 });
-
-app.post('/login', (req, res) => {
-})
 
 app.post('/admin/create-user/students', async (req, res) => {
   try {
@@ -178,6 +192,18 @@ app.post('/faculty/create-subject', async (req, res) => {
   }
 });
 
+app.post('/students/record', async (req, res) => {
+  const { student_id, date, status } = req.body;
+  try {
+    recordattendance(student_id, date, status);
+    res.status(201).send("Attendance recorded successfully");
+  } catch (error) {
+
+    console.error(error);
+    return res.status(500).send("Internal Server Error");
+  }
+});
+
 app.delete('/delete-student/:student_id', async (req, res) => {
   const studentID = req.params.student_id;
   try {
@@ -226,14 +252,6 @@ app.post('/view-details', async (req, res) => {
 });
 
 app.get('/report', (req, res) => {
-});
-
-app.get('/logout', (req, res) => {
-  res.status(200).send('Logout successfuly');
-});
-
-app.listen(port, () => {
-  console.log(`Example app listening on port ${port}`)
 });
 
 async function recordattendance(StudentId, Date, Status) {
@@ -451,3 +469,21 @@ async function existingsubjects(Code) {
       .find({ "code": { $eq: Code } })
       .toArray();
 }
+
+async function generateToken(userData) {
+  const token = jwt.sign(
+      {
+          username: userData.username,
+          studentID: userData.student_id,
+          role: userData.role
+      },
+      'Holy',
+      { expiresIn: '1h' }
+  );
+  console.log(token);
+  return token;
+}
+
+app.listen(port, () => {
+  console.log(`Example app listening on port ${port}`)
+});
