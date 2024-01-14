@@ -70,11 +70,7 @@ app.post('/admin/create-user/students', async (req, res) => {
     const { username, password, student_id, email, phone, PA } = req.body;
 
     // Check if the username already exists
-    const existingUser = await client
-      .db('AttendanceSystem')
-      .collection('Users')
-      .find({ "username": { $eq: username } })
-      .toArray();
+    const existingUser = await existingusers(client, username);
 
     if (existingUser.length > 0) {
       // If a user with the same username already exists, return a 400 response
@@ -97,11 +93,7 @@ app.post('/admin/create-user/staff', async (req, res) => {
   const { username, password, staff_id, email, role, phone } = req.body;
 
   try {
-    const existingUser = await client
-      .db('AttendanceSystem')
-      .collection('Users')
-      .find({ "username": { $eq: username } })
-      .toArray();
+    const existingUser = await existingusers(client, username);
 
     if (existingUser.length > 0) {
       // If a user with the same username already exists, return a 400 response
@@ -192,13 +184,13 @@ app.post('/faculty/create-subject', async (req, res) => {
   }
 });
 
-app.post('/students/record', async (req, res) => {
+app.post('/students/record/:student_id', student, (req, res) => {
   const { student_id, date, status } = req.body;
   try {
     recordattendance(student_id, date, status);
     res.status(201).send("Attendance recorded successfully");
   } catch (error) {
-
+    
     console.error(error);
     return res.status(500).send("Internal Server Error");
   }
@@ -404,6 +396,29 @@ async function findStudentById(studentId) {
   }
 }
 
+async function student(req, res, next) {
+  let header = req.headers.authorization;
+  if (!header) {
+    return res.status(401).send('Unauthorized');
+  }
+  
+  let token = header.split(' ')[1];
+  
+  jwt.verify(token, 'Holy', function (err, decoded) {
+    if (err) {
+      return res.status(401).send('Unauthorized');
+    }
+    else {
+      console.log(decoded);
+      if (decoded.studentID != req.params.student_id) {
+        console.log(decoded.studentID, req.params.student_id);
+        return res.status(401).send('Your own student ID only');
+      }
+    }
+    next();
+  });
+}
+
 async function deleteStudent(studentId) {
   try {
     const database = client.db('AttendanceSystem');
@@ -447,6 +462,18 @@ async function viewDetails(StudentId) {
   }
 }
 
+async function report(StudentId) {
+  try {
+    const database = client.db('Starting');
+    const collection = database.collection('Attendance');
+    const user = await collection.find({ student_id: StudentId }).toArray();
+    return user;
+  } catch (error) {
+    console.error('Error finding user by student_id:', error);
+    throw error;
+  }
+}
+
 async function findUserByUsername(username) {
   try {
     const database = client.db('AttendanceSystem');
@@ -460,6 +487,14 @@ async function findUserByUsername(username) {
     console.error('Error finding user by username:', error);
     throw error;
   }
+}
+
+async function existingusers(client, Username) {
+  return await client
+  .db('Starting')
+  .collection('users')
+  .find({ "username": { $eq: Username } })
+  .toArray();
 }
 
 async function existingsubjects(Code) {
