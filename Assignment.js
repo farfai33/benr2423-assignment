@@ -65,7 +65,7 @@ app.post('/login', async (req, res) => {
   }
 });
 
-app.post('/admin/create-user/students', async (req, res) => {
+app.post('/admin/create-user/students', ADMIN, async (req, res) => {
   try {
     const { username, password, student_id, email, phone, PA } = req.body;
 
@@ -89,7 +89,7 @@ app.post('/admin/create-user/students', async (req, res) => {
 }
 );
 
-app.post('/admin/create-user/staff', async (req, res) => {
+app.post('/admin/create-user/staff', ADMIN, async (req, res) => {
   const { username, password, staff_id, email, role, phone } = req.body;
 
   try {
@@ -110,7 +110,7 @@ app.post('/admin/create-user/staff', async (req, res) => {
   }
 })
 
-app.post('/admin/create-faculty', async (req, res) => {
+app.post('/admin/create-faculty', ADMIN, async (req, res) => {
   try {
     const { name, code, program, students, session } = req.body;
     
@@ -136,7 +136,7 @@ app.post('/admin/create-faculty', async (req, res) => {
   }
 });
 
-app.post('/admin/create-program', async (req, res) => {
+app.post('/admin/create-program', second, async (req, res) => {
   try {
     const { name, code, faculty, subject, students, session } = req.body;
     
@@ -162,7 +162,7 @@ app.post('/admin/create-program', async (req, res) => {
   }
 });
 
-app.post('/faculty/create-subject', async (req, res) => {
+app.post('/faculty/create-subject', second, async (req, res) => {
   try {
     const { name, code, credit, faculty, program, session } = req.body;
     
@@ -196,7 +196,7 @@ app.post('/students/record/:student_id', student, (req, res) => {
   }
 });
 
-app.delete('/delete-student/:student_id', async (req, res) => {
+app.delete('/delete-student/:student_id', ADMIN, async (req, res) => {
   const studentID = req.params.student_id;
   try {
     const student = await findStudentById(studentID);
@@ -218,7 +218,7 @@ app.delete('/delete-student/:student_id', async (req, res) => {
 }
 );
 
-app.post('/view-student-list', async (req, res) => {
+app.post('/view-student-list', second, async (req, res) => {
   try {
     const list = await viewStudentList();
     console.log(list);
@@ -264,6 +264,50 @@ async function recordattendance(StudentId, Date, Status) {
   catch (error) {
     console.error("Error recording attendance:", error);
   }
+}
+
+async function ADMIN(req, res, next) {
+  let header = req.headers.authorization;
+  if (!header) {
+      return res.status(401).send('Unauthorized');
+  }
+
+  let token = header.split(' ')[1];
+
+  jwt.verify(token, 'Holy', function (err, decoded) {
+      if (err) {
+          return res.status(401).send('Unauthorized');
+      }
+      else {
+          console.log(decoded.role)
+          if (decoded.role != "Admin") {
+              return res.status(401).send('Admin only');
+          }
+      }
+      next();
+  });
+}
+
+async function second(req, res, next) {
+  let header = req.headers.authorization;
+  if (!header) {
+      return res.status(401).send('Unauthorized');
+  }
+
+  let token = header.split(' ')[1];
+
+  jwt.verify(token, 'Holy', function (err, decoded) {
+      if (err) {
+          return res.status(401).send('Unauthorized');
+      }
+      else {
+          if (decoded.role != "Staff" && decoded.role != "Admin") {
+              return res.status(401).send('Admin or Staff only');
+          }
+          console.log(decoded.role)
+      }
+      next();
+  });
 }
 
 async function createStudent(Username, Password, StudentId, Email, Phone, PA) {
