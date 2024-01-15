@@ -536,7 +536,7 @@ async function findUserByUsername(username) {
 async function existingusers(client, Username) {
   return await client
   .db('AttendanceSystem')
-  .collection('users')
+  .collection('Users')
   .find({ "username": { $eq: Username } })
   .toArray();
 }
