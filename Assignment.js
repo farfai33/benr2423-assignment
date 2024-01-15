@@ -70,7 +70,7 @@ app.post('/admin/create-user/students', ADMIN, async (req, res) => {
     const { username, password, student_id, email, phone, PA } = req.body;
 
     // Check if the username already exists
-    const existingUser = await existingusers(client, username);
+    const existingUser = await existingusers(username);
 
     if (existingUser.length > 0) {
       // If a user with the same username already exists, return a 400 response
@@ -93,7 +93,7 @@ app.post('/admin/create-user/staff', ADMIN, async (req, res) => {
   const { username, password, staff_id, email, role, phone } = req.body;
 
   try {
-    const existingUser = await existingusers(client, username);
+    const existingUser = await existingusers(username);
 
     if (existingUser.length > 0) {
       // If a user with the same username already exists, return a 400 response
@@ -559,7 +559,7 @@ async function findUserByUsername(username) {
   }
 }
 
-async function existingusers(client, Username) {
+async function existingusers(Username) {
   return await client
   .db('AttendanceSystem')
   .collection('Users')
