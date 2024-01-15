@@ -575,7 +575,7 @@ async function existingsubjects(Code) {
       .toArray();
 }
 
-async function existingprograms(client, Code) {
+async function existingprograms(Code) {
     return await client
         .db('AttendanceSystem')
         .collection('Programs')
@@ -583,7 +583,7 @@ async function existingprograms(client, Code) {
         .toArray();
 }
 
-async function existingfaculties(client, Code) {
+async function existingfaculties(Code) {
     return await client
         .db('AttendanceSystem')
         .collection('Faculty')
