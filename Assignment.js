@@ -508,7 +508,7 @@ async function viewDetails(StudentId) {
 
 async function report(StudentId) {
   try {
-    const database = client.db('Starting');
+    const database = client.db('AttendanceSystem');
     const collection = database.collection('Attendance');
     const user = await collection.find({ student_id: StudentId }).toArray();
     return user;
@@ -535,7 +535,7 @@ async function findUserByUsername(username) {
 
 async function existingusers(client, Username) {
   return await client
-  .db('Starting')
+  .db('AttendanceSystem')
   .collection('users')
   .find({ "username": { $eq: Username } })
   .toArray();
