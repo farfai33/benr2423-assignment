@@ -70,7 +70,7 @@ app.post('/admin/create-user/students', ADMIN, async (req, res) => {
     const { username, password, student_id, email, phone, PA } = req.body;
 
     // Check if the username already exists
-    const existingUser = await existingusers(username);
+    const existingUser = await existingusers(client, username);
 
     if (existingUser.length > 0) {
       // If a user with the same username already exists, return a 400 response
@@ -93,7 +93,7 @@ app.post('/admin/create-user/staff', ADMIN, async (req, res) => {
   const { username, password, staff_id, email, role, phone } = req.body;
 
   try {
-    const existingUser = await existingusers(username);
+    const existingUser = await existingusers(client, username);
 
     if (existingUser.length > 0) {
       // If a user with the same username already exists, return a 400 response
@@ -239,8 +239,8 @@ app.post('/report', async (req, res) => {
     const { student_id } = req.body;
 
     try {
-        const details = await viewDetails(student_id);
-        const attendanceDetails = await report(student_id);
+        const details = await view.viewDetails(client, student_id);
+        const attendanceDetails = await others.report(client, details.student_id);
 
         if (attendanceDetails && attendanceDetails.length > 0) {
             const datesAndStatus = attendanceDetails.map(entry => ({
@@ -454,8 +454,8 @@ async function createSubject(Name, Code, Credit, Faculty, Program, Session) {
 
 async function findStudentById(studentId) {
   try {
-    const database = client.db('AttendanceSystem');
-    const collection = database.collection('Users');
+    const database = client.db('Starting');
+    const collection = database.collection('users');
 
     // Find the student based on their student_id
     const student = await collection.findOne({ student_id: studentId });
@@ -491,8 +491,8 @@ async function student(req, res, next) {
 
 async function deleteStudent(studentId) {
   try {
-    const database = client.db('AttendanceSystem');
-    const collection = database.collection('Users');
+    const database = client.db('Starting');
+    const collection = database.collection('users');
 
     // Delete the student based on their student_id
     const result = await collection.deleteOne({ student_id: studentId });
@@ -559,7 +559,7 @@ async function findUserByUsername(username) {
   }
 }
 
-async function existingusers(Username) {
+async function existingusers(client, Username) {
   return await client
   .db('AttendanceSystem')
   .collection('Users')
@@ -575,7 +575,7 @@ async function existingsubjects(Code) {
       .toArray();
 }
 
-async function existingprograms(Code) {
+async function existingprograms(client, Code) {
     return await client
         .db('AttendanceSystem')
         .collection('Programs')
@@ -583,7 +583,7 @@ async function existingprograms(Code) {
         .toArray();
 }
 
-async function existingfaculties(Code) {
+async function existingfaculties(client, Code) {
     return await client
         .db('AttendanceSystem')
         .collection('Faculty')
