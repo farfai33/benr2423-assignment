@@ -132,7 +132,7 @@ app.post('/admin/create-faculty', ADMIN, async (req, res) => {
   }
 });
 
-app.post('/admin/create-program', second, async (req, res) => {
+app.post('/faculty/create-program', second, async (req, res) => {
   try {
     const { name, code, faculty, subject, students, session } = req.body;
     
@@ -227,7 +227,7 @@ app.post('/view-details', async (req, res) => {
 
   try {
       viewDetails(student_id);
-      return res.status(201).send("Attendance recorded successfully");
+      return res.status(201).send("View Details successful");
   }
   catch (error) {
       console.error(error);
