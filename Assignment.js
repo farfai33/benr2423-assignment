@@ -115,11 +115,7 @@ app.post('/admin/create-faculty', ADMIN, async (req, res) => {
     const { name, code, program, students, session } = req.body;
     
     // Check if the username already exists
-    const existingFaculty = await client
-    .db('AttendanceSystem')
-    .collection('Faculties')
-    .find({ "code": { $eq: code } })
-    .toArray();
+    const existingFaculty = await existingfaculties(code);
     
     if (existingFaculty.length > 0) {
       // If a user with the same username already exists, return a 400 response
@@ -141,11 +137,7 @@ app.post('/admin/create-program', second, async (req, res) => {
     const { name, code, faculty, subject, students, session } = req.body;
     
     // Check if the username already exists
-    const existingProgram = await client
-    .db('AttendanceSystem')
-    .collection('Programs')
-    .find({ "code": { $eq: code } })
-    .toArray();
+    const existingProgram = await existingprograms(code);
     
     if (existingProgram.length > 0) {
       // If a user with the same username already exists, return a 400 response
@@ -243,7 +235,28 @@ app.post('/view-details', async (req, res) => {
   }
 });
 
-app.get('/report', (req, res) => {
+app.post('/report', async (req, res) => {
+    const { student_id } = req.body;
+
+    try {
+        const details = await view.viewDetails(client, student_id);
+        const attendanceDetails = await others.report(client, details.student_id);
+
+        if (attendanceDetails && attendanceDetails.length > 0) {
+            const datesAndStatus = attendanceDetails.map(entry => ({
+                date: entry.date,
+                status: entry.status
+            }));
+
+            console.log(datesAndStatus);
+            return res.status(200).send("Successful");
+        } else {
+            return res.status(404).send("Attendance details not found");
+        }
+    } catch (error) {
+        console.error(error);
+        return res.status(500).send("Internal Server Error");
+    }
 });
 
 app.patch('/faculty/update-student', second, async (req, res) => {
@@ -560,6 +573,22 @@ async function existingsubjects(Code) {
       .collection('Subjects')
       .find({ "code": { $eq: Code } })
       .toArray();
+}
+
+async function existingprograms(client, Code) {
+    return await client
+        .db('AttendanceSystem')
+        .collection('Programs')
+        .find({ "code": { $eq: Code } })
+        .toArray();
+}
+
+async function existingfaculties(client, Code) {
+    return await client
+        .db('AttendanceSystem')
+        .collection('Faculty')
+        .find({ "code": { $eq: Code } })
+        .toArray();
 }
 
 async function generateToken(userData) {
