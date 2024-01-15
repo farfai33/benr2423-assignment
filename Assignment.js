@@ -246,6 +246,19 @@ app.post('/view-details', async (req, res) => {
 app.get('/report', (req, res) => {
 });
 
+app.patch('/faculty/update-student', second, async (req, res) => {
+  const { student_id, code } = req.body;
+
+  try {
+      addStudent(code, student_id);
+      return res.status(201).send("Student added successfully");
+  }
+  catch (error) {
+      console.error(error);
+      return res.status(500).send("Internal Server Error");
+  }
+});
+
 async function recordattendance(StudentId, Date, Status) {
   try {
     const database = client.db('AttendanceSystem');
@@ -561,6 +574,24 @@ async function generateToken(userData) {
   );
   console.log(token);
   return token;
+}
+
+async function addStudent(code, studentID) {
+  try {
+      const database = client.db('AttendanceSystem');
+      const collection = database.collection('Subjects');
+
+      const result = await collection.updateOne(
+          { code: { $eq: code } },
+          { $addToSet: { students: studentID } }
+      );
+
+      // Successful operation
+      return result;
+  } catch (error) {
+      console.error('Error adding student:', error);
+      return { success: false, message: 'Internal Server Error' };
+  }
 }
 
 app.listen(port, () => {
