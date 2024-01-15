@@ -239,8 +239,8 @@ app.post('/report', async (req, res) => {
     const { student_id } = req.body;
 
     try {
-        const details = await view.viewDetails(client, student_id);
-        const attendanceDetails = await others.report(client, details.student_id);
+        const details = await viewDetails(client, student_id);
+        const attendanceDetails = await report(client, student_id);
 
         if (attendanceDetails && attendanceDetails.length > 0) {
             const datesAndStatus = attendanceDetails.map(entry => ({
