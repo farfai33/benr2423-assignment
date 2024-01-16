@@ -41,27 +41,27 @@ app.post('/login', async (req, res) => {
   const { username, password } = req.body;
 
   try {
-      console.log('Attempting to find user by username:', username);
-      const user = await findUserByUsername(username);
+    console.log('Attempting to find user by username:', username);
+    const user = await findUserByUsername(username);
 
-      if (!user) {
-          console.log('User not found:', username);
-          return res.status(401).send('Invalid username or password');
-      }
+    if (!user) {
+      console.log('User not found:', username);
+      return res.status(401).send('Invalid username or password');
+    }
 
-      const passwordMatch = await bcrypt.compare(password, user.password);
-      if (passwordMatch) {
-          console.log('Login successful for user:', username);
-          const token = await generateToken(user);
-          res.send('Login Succesful, your token is \n' + token);
-      } else {
-          console.log('Incorrect password for user:', username);
-          res.status(401).send('Invalid username or password');
-      }
+    const passwordMatch = await bcrypt.compare(password, user.password);
+    if (passwordMatch) {
+      console.log('Login successful for user:', username);
+      const token = await generateToken(user);
+      res.send('Login Succesful, your token is \n' + token);
+    } else {
+      console.log('Incorrect password for user:', username);
+      res.status(401).send('Invalid username or password');
+    }
   }
   catch (error) {
-      console.error('Error during login:', error);
-      res.status(500).send('Internal Server Error');
+    console.error('Error during login:', error);
+    res.status(500).send('Internal Server Error');
   }
 });
 
@@ -113,16 +113,16 @@ app.post('/admin/create-user/staff', ADMIN, async (req, res) => {
 app.post('/admin/create-faculty', ADMIN, async (req, res) => {
   try {
     const { name, code, program, students, session } = req.body;
-    
+
     // Check if the username already exists
     const existingFaculty = await existingfaculties(code);
-    
+
     if (existingFaculty.length > 0) {
       // If a user with the same username already exists, return a 400 response
       console.log(existingFaculty);
       return res.status(400).send('Faculty already exists');
     }
-    
+
     // If the username is unique, proceed to create the new student
     createFaculty(name, code, program, students, session);
     return res.status(201).send("Faculty created successfully");
@@ -135,16 +135,16 @@ app.post('/admin/create-faculty', ADMIN, async (req, res) => {
 app.post('/faculty/create-program', second, async (req, res) => {
   try {
     const { name, code, faculty, subject, students, session } = req.body;
-    
+
     // Check if the username already exists
     const existingProgram = await existingprograms(code);
-    
+
     if (existingProgram.length > 0) {
       // If a user with the same username already exists, return a 400 response
       console.log(existingProgram);
       return res.status(400).send('Program already exists');
     }
-    
+
     // If the username is unique, proceed to create the new student
     createPrograms(name, code, faculty, subject, students, session);
     return res.status(201).send("Program created successfully");
@@ -157,16 +157,16 @@ app.post('/faculty/create-program', second, async (req, res) => {
 app.post('/faculty/create-subject', second, async (req, res) => {
   try {
     const { name, code, credit, faculty, program, session } = req.body;
-    
+
     // Check if the username already exists
     const existingSubject = await existingsubjects(code);
-    
+
     if (existingSubject.length > 0) {
       // If a user with the same username already exists, return a 400 response
       console.log(existingSubject);
       return res.status(400).send('Subject already exists');
     }
-    
+
     // If the username is unique, proceed to create the new student
     createSubject(name, code, credit, faculty, program, session);
     return res.status(201).send("Subject created successfully");
@@ -182,7 +182,7 @@ app.post('/students/record/:student_id', student, (req, res) => {
     recordattendance(student_id, date, status);
     res.status(201).send("Attendance recorded successfully");
   } catch (error) {
-    
+
     console.error(error);
     return res.status(500).send("Internal Server Error");
   }
@@ -226,49 +226,49 @@ app.post('/view-details', async (req, res) => {
   const { student_id } = req.body;
 
   try {
-      viewDetails(student_id);
-      return res.status(201).send("View Details successful");
+    viewDetails(student_id);
+    return res.status(201).send("View Details successful");
   }
   catch (error) {
-      console.error(error);
-      return res.status(500).send("Internal Server Error");
+    console.error(error);
+    return res.status(500).send("Internal Server Error");
   }
 });
 
 app.post('/report', async (req, res) => {
-    const { student_id } = req.body;
+  const { student_id } = req.body;
 
-    try {
-        const details = await viewDetails(student_id);
-        const attendanceDetails = await report(student_id);
+  try {
+    const details = await viewDetails(student_id);
+    const attendanceDetails = await report(details.student_id);
 
-        if (attendanceDetails && attendanceDetails.length > 0) {
-            const datesAndStatus = attendanceDetails.map(entry => ({
-                date: entry.date,
-                status: entry.status
-            }));
+    if (attendanceDetails && attendanceDetails.length > 0) {
+      const datesAndStatus = attendanceDetails.map(entry => ({
+        date: entry.date,
+        status: entry.status
+      }));
 
-            console.log(datesAndStatus);
-            return res.status(200).send("Successful");
-        } else {
-            return res.status(404).send("Attendance details not found");
-        }
-    } catch (error) {
-        console.error(error);
-        return res.status(500).send("Internal Server Error");
+      console.log(datesAndStatus);
+      return res.status(200).send("Successful");
+    } else {
+      return res.status(404).send("Attendance details not found");
     }
+  } catch (error) {
+    console.error(error);
+    return res.status(500).send("Internal Server Error");
+  }
 });
 
 app.patch('/faculty/update-student', second, async (req, res) => {
   const { student_id, code } = req.body;
 
   try {
-      addStudent(code, student_id);
-      return res.status(201).send("Student added successfully");
+    addStudent(code, student_id);
+    return res.status(201).send("Student added successfully");
   }
   catch (error) {
-      console.error(error);
-      return res.status(500).send("Internal Server Error");
+    console.error(error);
+    return res.status(500).send("Internal Server Error");
   }
 });
 
@@ -295,44 +295,44 @@ async function recordattendance(StudentId, Date, Status) {
 async function ADMIN(req, res, next) {
   let header = req.headers.authorization;
   if (!header) {
-      return res.status(401).send('Unauthorized');
+    return res.status(401).send('Unauthorized');
   }
 
   let token = header.split(' ')[1];
 
   jwt.verify(token, 'Holy', function (err, decoded) {
-      if (err) {
-          return res.status(401).send('Unauthorized');
+    if (err) {
+      return res.status(401).send('Unauthorized');
+    }
+    else {
+      console.log(decoded.role)
+      if (decoded.role != "Admin") {
+        return res.status(401).send('Admin only');
       }
-      else {
-          console.log(decoded.role)
-          if (decoded.role != "Admin") {
-              return res.status(401).send('Admin only');
-          }
-      }
-      next();
+    }
+    next();
   });
 }
 
 async function second(req, res, next) {
   let header = req.headers.authorization;
   if (!header) {
-      return res.status(401).send('Unauthorized');
+    return res.status(401).send('Unauthorized');
   }
 
   let token = header.split(' ')[1];
 
   jwt.verify(token, 'Holy', function (err, decoded) {
-      if (err) {
-          return res.status(401).send('Unauthorized');
+    if (err) {
+      return res.status(401).send('Unauthorized');
+    }
+    else {
+      if (decoded.role != "Staff" && decoded.role != "Admin") {
+        return res.status(401).send('Admin or Staff only');
       }
-      else {
-          if (decoded.role != "Staff" && decoded.role != "Admin") {
-              return res.status(401).send('Admin or Staff only');
-          }
-          console.log(decoded.role)
-      }
-      next();
+      console.log(decoded.role)
+    }
+    next();
   });
 }
 
@@ -372,7 +372,7 @@ async function createStaff(Username, Password, StaffId, Email, Role, Phone) {
       password: Password,
       staff_id: StaffId,
       email: Email,
-      role: Role,
+      role: "Staff",
       phone: Phone
     };
     // Insert the user object into the collection
@@ -388,7 +388,7 @@ async function createFaculty(Name, Code, Programs, Students, Session) {
   try {
     const database = client.db('AttendanceSystem');
     const collection = database.collection('Faculties');
-    
+
     // Create a user object
     const faculty = {
       name: Name,
@@ -399,11 +399,11 @@ async function createFaculty(Name, Code, Programs, Students, Session) {
     };
     // Insert the user object into the collection
     await collection.insertOne(faculty);
-    
+
     console.log("Faculty created successfully");
-    } catch (error) {
-      console.error("Error creating faculty:", error);
-    }
+  } catch (error) {
+    console.error("Error creating faculty:", error);
+  }
 }
 
 async function createPrograms(Name, Code, Faculty, Subjects, Students, Session) {
@@ -422,7 +422,7 @@ async function createPrograms(Name, Code, Faculty, Subjects, Students, Session) 
     };
     // Insert the user object into the collection
     await collection.insertOne(program);
-    
+
     console.log("Program created successfully");
   } catch (error) {
     console.error("Error creating program:", error);
@@ -433,7 +433,7 @@ async function createSubject(Name, Code, Credit, Faculty, Program, Session) {
   try {
     const database = client.db('AttandanceSystem');
     const collection = database.collection('Subjects');
-    
+
     // Create a user object
     const subject = {
       name: Name,
@@ -445,7 +445,7 @@ async function createSubject(Name, Code, Credit, Faculty, Program, Session) {
     };
     // Insert the user object into the collection
     await collection.insertOne(subject);
-    
+
     console.log("Subject created successfully");
   } catch (error) {
     console.error("Error creating subject:", error);
@@ -471,9 +471,9 @@ async function student(req, res, next) {
   if (!header) {
     return res.status(401).send('Unauthorized');
   }
-  
+
   let token = header.split(' ')[1];
-  
+
   jwt.verify(token, 'Holy', function (err, decoded) {
     if (err) {
       return res.status(401).send('Unauthorized');
@@ -509,7 +509,7 @@ async function viewStudentList() {
     const collection = database.collection('Users');
 
     // Find the user by username
-    const user = await collection.find({ role: {$eq:"Student"} }).toArray();
+    const user = await collection.find({ role: { $eq: "Student" } }).toArray();
 
     return user;
   } catch (error) {
@@ -519,16 +519,16 @@ async function viewStudentList() {
 }
 async function viewDetails(StudentId) {
   try {
-      const database = client.db('AttendanceSystem');
-      const collection = database.collection('Attendance');
+    const database = client.db('AttendanceSystem');
+    const collection = database.collection('Attendance');
 
-      // Find the user by username
-      const user = await collection.findOne({ StudentId });
+    // Find the user by username
+    const user = await collection.findOne({ StudentId });
 
-      return user;
+    return user;
   } catch (error) {
-      console.error('Error finding user by username:', error);
-      throw error;
+    console.error('Error finding user by username:', error);
+    throw error;
   }
 }
 
@@ -561,45 +561,45 @@ async function findUserByUsername(username) {
 
 async function existingusers(Username) {
   return await client
-  .db('AttendanceSystem')
-  .collection('Users')
-  .find({ "username": { $eq: Username } })
-  .toArray();
+    .db('AttendanceSystem')
+    .collection('Users')
+    .find({ "username": { $eq: Username } })
+    .toArray();
 }
 
 async function existingsubjects(Code) {
   return await client
-      .db('AttendanceSystem')
-      .collection('Subjects')
-      .find({ "code": { $eq: Code } })
-      .toArray();
+    .db('AttendanceSystem')
+    .collection('Subjects')
+    .find({ "code": { $eq: Code } })
+    .toArray();
 }
 
 async function existingprograms(Code) {
-    return await client
-        .db('AttendanceSystem')
-        .collection('Programs')
-        .find({ "code": { $eq: Code } })
-        .toArray();
+  return await client
+    .db('AttendanceSystem')
+    .collection('Programs')
+    .find({ "code": { $eq: Code } })
+    .toArray();
 }
 
 async function existingfaculties(Code) {
-    return await client
-        .db('AttendanceSystem')
-        .collection('Faculty')
-        .find({ "code": { $eq: Code } })
-        .toArray();
+  return await client
+    .db('AttendanceSystem')
+    .collection('Faculty')
+    .find({ "code": { $eq: Code } })
+    .toArray();
 }
 
 async function generateToken(userData) {
   const token = jwt.sign(
-      {
-          username: userData.username,
-          studentID: userData.student_id,
-          role: userData.role
-      },
-      'Holy',
-      { expiresIn: '1h' }
+    {
+      username: userData.username,
+      studentID: userData.student_id,
+      role: userData.role
+    },
+    'Holy',
+    { expiresIn: '1h' }
   );
   console.log(token);
   return token;
@@ -607,19 +607,19 @@ async function generateToken(userData) {
 
 async function addStudent(code, studentID) {
   try {
-      const database = client.db('AttendanceSystem');
-      const collection = database.collection('Subjects');
+    const database = client.db('AttendanceSystem');
+    const collection = database.collection('Subjects');
 
-      const result = await collection.updateOne(
-          { code: { $eq: code } },
-          { $addToSet: { students: studentID } }
-      );
+    const result = await collection.updateOne(
+      { code: { $eq: code } },
+      { $addToSet: { students: studentID } }
+    );
 
-      // Successful operation
-      return result;
+    // Successful operation
+    return result;
   } catch (error) {
-      console.error('Error adding student:', error);
-      return { success: false, message: 'Internal Server Error' };
+    console.error('Error adding student:', error);
+    return { success: false, message: 'Internal Server Error' };
   }
 }
 
