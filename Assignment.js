@@ -431,7 +431,7 @@ async function createPrograms(Name, Code, Faculty, Subjects, Students, Session) 
 
 async function createSubject(Name, Code, Credit, Faculty, Program, Session) {
   try {
-    const database = client.db('AttandanceSystem');
+    const database = client.db('AttendanceSystem');
     const collection = database.collection('Subjects');
 
     // Create a user object
