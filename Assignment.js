@@ -8,6 +8,8 @@ const port = process.env.PORT || 3000;
 const bcrypt = require('bcrypt');
 var jwt = require('jsonwebtoken');
 
+const create = require('./Functions/CreateFunctions.js');
+
 app.use(express.json())
 // Create a MongoClient with a MongoClientOptions object to set the Stable API version
 const client = new MongoClient(uri, {
@@ -31,10 +33,6 @@ async function run() {
   }
 }
 run().catch(console.dir);
-
-app.get('/', (req, res) => {
-  res.send('Hello World!')
-});
 
 app.post('/login', async (req, res) => {
   console.log('Request received for /login');
@@ -80,7 +78,7 @@ app.post('/admin/create-user/students', ADMIN, async (req, res) => {
 
     const hashedPassword = await bcrypt.hash(password, 10);
     // If the username is unique, proceed to create the new student
-    createStudent(username, hashedPassword, student_id, email, phone, PA);
+    await create.createStudent(client, username, hashedPassword, student_id, email, phone, PA);
     return res.status(201).send("User created successfully");
   } catch (error) {
     console.error(error);
@@ -90,7 +88,7 @@ app.post('/admin/create-user/students', ADMIN, async (req, res) => {
 );
 
 app.post('/admin/create-user/staff', ADMIN, async (req, res) => {
-  const { username, password, staff_id, email, role, phone } = req.body;
+  const { username, password, staff_id, email, phone } = req.body;
 
   try {
     const existingUser = await existingusers(username);
@@ -102,7 +100,7 @@ app.post('/admin/create-user/staff', ADMIN, async (req, res) => {
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
-    await createStaff(username, hashedPassword, staff_id, email, role, phone);
+    await create.createStaff(client, username, hashedPassword, staff_id, email, phone);
     res.status(201).send("User created successfully");
   } catch (error) {
     console.error(error);
@@ -124,7 +122,7 @@ app.post('/admin/create-faculty', ADMIN, async (req, res) => {
     }
 
     // If the username is unique, proceed to create the new student
-    createFaculty(name, code, program, students, session);
+    await create.createFaculty(client, name, code, program, students, session);
     return res.status(201).send("Faculty created successfully");
   } catch (error) {
     console.error(error);
@@ -132,7 +130,7 @@ app.post('/admin/create-faculty', ADMIN, async (req, res) => {
   }
 });
 
-app.post('/faculty/create-program', second, async (req, res) => {
+app.post('/faculty/create-program', FACULTY, async (req, res) => {
   try {
     const { name, code, faculty, subject, students, session } = req.body;
 
@@ -146,7 +144,7 @@ app.post('/faculty/create-program', second, async (req, res) => {
     }
 
     // If the username is unique, proceed to create the new student
-    createPrograms(name, code, faculty, subject, students, session);
+    await create.createPrograms(client, name, code, faculty, subject, students, session);
     return res.status(201).send("Program created successfully");
   } catch (error) {
     console.error(error);
@@ -154,7 +152,7 @@ app.post('/faculty/create-program', second, async (req, res) => {
   }
 });
 
-app.post('/faculty/create-subject', second, async (req, res) => {
+app.post('/faculty/create-subject', FACULTY, async (req, res) => {
   try {
     const { name, code, credit, faculty, program, session } = req.body;
 
@@ -168,7 +166,7 @@ app.post('/faculty/create-subject', second, async (req, res) => {
     }
 
     // If the username is unique, proceed to create the new student
-    createSubject(name, code, credit, faculty, program, session);
+    await create.createSubject(client, name, code, credit, faculty, program, session);
     return res.status(201).send("Subject created successfully");
   } catch (error) {
     console.error(error);
@@ -210,7 +208,7 @@ app.delete('/delete-student/:student_id', ADMIN, async (req, res) => {
 }
 );
 
-app.post('/view-student-list', second, async (req, res) => {
+app.get('/view-student-list', FACULTY, async (req, res) => {
   try {
     const list = await viewStudentList();
     console.log(list);
@@ -222,13 +220,12 @@ app.post('/view-student-list', second, async (req, res) => {
   }
 });
 
-app.post('/view-details', async (req, res) => {
+app.post('/view-details', FACULTYSTUDENT, async (req, res) => {
   const { student_id } = req.body;
 
   try {
     const details = await viewDetails(student_id);
-    console.log(details);
-    return res.status(201).send("View Details successful");
+    return res.status(201).json({ message: "View Details successful\n", details });
   }
   catch (error) {
     console.error(error);
@@ -236,7 +233,7 @@ app.post('/view-details', async (req, res) => {
   }
 });
 
-app.post('/report', async (req, res) => {
+app.post('/report', FACULTYSTUDENT, async (req, res) => {
   const { student_id } = req.body;
 
   try {
@@ -260,7 +257,7 @@ app.post('/report', async (req, res) => {
   }
 });
 
-app.patch('/faculty/update-student', second, async (req, res) => {
+app.patch('/faculty/update-student', FACULTY, async (req, res) => {
   const { student_id, code } = req.body;
 
   try {
@@ -337,122 +334,6 @@ async function second(req, res, next) {
   });
 }
 
-async function createStudent(Username, Password, StudentId, Email, Phone, PA) {
-  try {
-    const database = client.db('AttendanceSystem');
-    const collection = database.collection('Users');
-
-    // Create a user object
-    const user = {
-      username: Username,
-      password: Password,
-      student_id: StudentId,
-      email: Email,
-      role: "Student",
-      phone: Phone,
-      PA: PA,
-    };
-
-    // Insert the user object into the collection
-    await collection.insertOne(user);
-    console.log("User created successfully");
-  }
-  catch (error) {
-    console.error("Error creating user:", error);
-  }
-}
-
-async function createStaff(Username, Password, StaffId, Email, Role, Phone) {
-  try {
-    const database = client.db('AttendanceSystem');
-    const collection = database.collection('Users');
-
-    // Create a user object
-    const user = {
-      username: Username,
-      password: Password,
-      staff_id: StaffId,
-      email: Email,
-      role: "Staff",
-      phone: Phone
-    };
-    // Insert the user object into the collection
-    await collection.insertOne(user);
-
-    console.log("User created successfully");
-  } catch (error) {
-    console.error("Error creating user:", error);
-  }
-}
-
-async function createFaculty(Name, Code, Programs, Students, Session) {
-  try {
-    const database = client.db('AttendanceSystem');
-    const collection = database.collection('Faculties');
-
-    // Create a user object
-    const faculty = {
-      name: Name,
-      code: Code,
-      program: Programs,
-      students: Students,
-      session: Session
-    };
-    // Insert the user object into the collection
-    await collection.insertOne(faculty);
-
-    console.log("Faculty created successfully");
-  } catch (error) {
-    console.error("Error creating faculty:", error);
-  }
-}
-
-async function createPrograms(Name, Code, Faculty, Subjects, Students, Session) {
-  try {
-    const database = client.db('AttendanceSystem');
-    const collection = database.collection('Programs');
-
-    // Create a user object
-    const program = {
-      name: Name,
-      code: Code,
-      faculty: Faculty,
-      subject: Subjects,
-      students: Students,
-      session: Session
-    };
-    // Insert the user object into the collection
-    await collection.insertOne(program);
-
-    console.log("Program created successfully");
-  } catch (error) {
-    console.error("Error creating program:", error);
-  }
-}
-
-async function createSubject(Name, Code, Credit, Faculty, Program, Session) {
-  try {
-    const database = client.db('AttendanceSystem');
-    const collection = database.collection('Subjects');
-
-    // Create a user object
-    const subject = {
-      name: Name,
-      code: Code,
-      credit: Credit,
-      faculty: Faculty,
-      program: Program,
-      session: Session
-    };
-    // Insert the user object into the collection
-    await collection.insertOne(subject);
-
-    console.log("Subject created successfully");
-  } catch (error) {
-    console.error("Error creating subject:", error);
-  }
-}
-
 async function findStudentById(studentId) {
   try {
     const database = client.db('AttendanceSystem');
@@ -481,9 +362,58 @@ async function student(req, res, next) {
     }
     else {
       console.log(decoded);
+      if(decoded.role != "Student"){
+        return res.status(401).send('Student only');
+      }
       if (decoded.studentID != req.params.student_id) {
         console.log(decoded.studentID, req.params.student_id);
         return res.status(401).send('Your own student ID only');
+      }
+    }
+    next();
+  });
+}
+
+async function FACULTY(req, res, next) {
+  let header = req.headers.authorization;
+  if (!header) {
+    return res.status(401).send('Unauthorized');
+  }
+
+  let token = header.split(' ')[1];
+
+  jwt.verify(token, 'Holy', function (err, decoded) {
+    if (err) {
+      return res.status(401).send('Unauthorized');
+    }
+    else {
+      console.log(decoded);
+      if (decoded.role != "Staff") {
+        console.log(decoded.role);
+        return res.status(401).send('Faculty Level Only');
+      }
+    }
+    next();
+  });
+}
+
+async function FACULTYSTUDENT(req, res, next) {
+  let header = req.headers.authorization;
+  if (!header) {
+    return res.status(401).send('Unauthorized');
+  }
+
+  let token = header.split(' ')[1];
+
+  jwt.verify(token, 'Holy', function (err, decoded) {
+    if (err) {
+      return res.status(401).send('Unauthorized');
+    }
+    else {
+      console.log(decoded);
+      if (decoded.role != "Staff" && decoded.role != "Student") {
+        console.log(decoded.role);
+        return res.status(401).send('Faculty and Student Access Only');
       }
     }
     next();
@@ -524,7 +454,7 @@ async function viewDetails(StudentId) {
     const collection = database.collection('Users');
 
     // Find the user by username
-    const user = await collection.findOne({ student_id: {$eq: StudentId } });
+    const user = await collection.findOne({ student_id: { $eq: StudentId } });
 
     return user;
   } catch (error) {

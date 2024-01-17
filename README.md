@@ -11,7 +11,7 @@ tracking, offering real-time updates, automated reporting, and user-friendly int
 enhancing efficiency and accuracy in student participation monitoring.  
 Your team is required to develop the backend solution for a attendance system. A sample of the usecase  
 diagram is shown in Figure 1. The job scopes include:  
-- [ ] Design the database model using MongoDB  
-- [ ] Secure the database system  
+- [x] Design the database model using MongoDB  
+- [x] Secure the database system  
 - [ ] Develop the backend server using NodeJs to handle all the relevant RESTful API  
 - [ ] Host the application to the Microsoft Azure Cloud  
