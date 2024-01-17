@@ -226,7 +226,8 @@ app.post('/view-details', async (req, res) => {
   const { student_id } = req.body;
 
   try {
-    viewDetails(student_id);
+    const details = await viewDetails(student_id);
+    console.log(details);
     return res.status(201).send("View Details successful");
   }
   catch (error) {
@@ -520,10 +521,10 @@ async function viewStudentList() {
 async function viewDetails(StudentId) {
   try {
     const database = client.db('AttendanceSystem');
-    const collection = database.collection('Attendance');
+    const collection = database.collection('Users');
 
     // Find the user by username
-    const user = await collection.findOne({ StudentId });
+    const user = await collection.findOne({ student_id: {$eq: StudentId } });
 
     return user;
   } catch (error) {
