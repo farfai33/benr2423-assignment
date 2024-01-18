@@ -165,7 +165,6 @@ app.post('/faculty/create-subject', FACULTY, async (req, res) => {
       return res.status(400).send('Subject already exists');
     }
 
-    // If the username is unique, proceed to create the new student
     await create.createSubject(client, name, code, credit, faculty, program, session);
     return res.status(201).send("Subject created successfully");
   } catch (error) {
@@ -175,9 +174,9 @@ app.post('/faculty/create-subject', FACULTY, async (req, res) => {
 });
 
 app.post('/students/record/:student_id', student, (req, res) => {
-  const { student_id, date, status } = req.body;
+  const { subject, date, status } = req.body;
   try {
-    recordattendance(student_id, date, status);
+    recordattendance(req.body.student_id, subject, date, status);
     res.status(201).send("Attendance recorded successfully");
   } catch (error) {
 
@@ -269,7 +268,7 @@ app.patch('/faculty/update-student', FACULTY, async (req, res) => {
   }
 });
 
-async function recordattendance(StudentId, Date, Status) {
+async function recordattendance(StudentId, Subject, Date, Status) {
   try {
     const database = client.db('AttendanceSystem');
     const collection = database.collection('Attendance');
@@ -277,6 +276,7 @@ async function recordattendance(StudentId, Date, Status) {
     // Create a user object
     const attendance = {
       student_id: StudentId,
+      subject : Subject,
       date: Date,
       status: Status
     };
@@ -306,28 +306,6 @@ async function ADMIN(req, res, next) {
       if (decoded.role != "Admin") {
         return res.status(401).send('Admin only');
       }
-    }
-    next();
-  });
-}
-
-async function second(req, res, next) {
-  let header = req.headers.authorization;
-  if (!header) {
-    return res.status(401).send('Unauthorized');
-  }
-
-  let token = header.split(' ')[1];
-
-  jwt.verify(token, 'Holy', function (err, decoded) {
-    if (err) {
-      return res.status(401).send('Unauthorized');
-    }
-    else {
-      if (decoded.role != "Staff" && decoded.role != "Admin") {
-        return res.status(401).send('Admin or Staff only');
-      }
-      console.log(decoded.role)
     }
     next();
   });
