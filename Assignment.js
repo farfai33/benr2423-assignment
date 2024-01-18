@@ -208,11 +208,10 @@ app.delete('/delete-student/:student_id', ADMIN, async (req, res) => {
 }
 );
 
-app.get('/view-student-list', FACULTY, async (req, res) => {
+app.get('/view-student-list/:staff_id', FACULTY,  async (req, res) => {
   try {
-    const list = await viewStudentList();
-    console.log(list);
-    return res.status(201).send("View successfully completed");
+    const list = await viewStudentListByLecturer(req.params.staff_id);
+    return res.status(201).json({ Details: 'Students', list});
   }
   catch (error) {
     console.error(error);
@@ -225,7 +224,7 @@ app.post('/view-details', FACULTYSTUDENT, async (req, res) => {
 
   try {
     const details = await viewDetails(student_id);
-    return res.status(201).json({ message: "View Details successful\n", details });
+    return res.status(201).json({ message: "View Details successful", details });
   }
   catch (error) {
     console.error(error);
@@ -434,20 +433,34 @@ async function deleteStudent(studentId) {
   }
 }
 
-async function viewStudentList() {
+async function viewStudentListByLecturer(lecturerId) {
   try {
     const database = client.db('AttendanceSystem');
     const collection = database.collection('Users');
 
-    // Find the user by username
-    const user = await collection.find({ role: { $eq: "Student" } }).toArray();
+    const staff = await collection.findOne({ role: 'staff', staff_id: lecturerId });
 
-    return user;
+    if (!staff) {
+      console.log('Lecturer not found');
+      return [];
+    }
+
+    const students = await collection.find({ role: 'Student', PA: staff.username }).toArray();
+
+    const studentList = students.map(student => ({
+      username: student.username,
+      student_id: student.student_id,
+      email: student.email,
+      phone: student.phone
+    }));
+
+    return studentList;
   } catch (error) {
-    console.error('Error finding user by username:', error);
+    console.error('Error finding students for lecturer:', error);
     throw error;
   }
 }
+
 async function viewDetails(StudentId) {
   try {
     const database = client.db('AttendanceSystem');
