@@ -11,6 +11,7 @@ const token = require('./Functions/TokenFunctions.js');
 const find = require('./Functions/FindFunctions.js');
 const view = require('./Functions/ViewFunctions.js');
 const exist = require('./Functions/ExistingFunctions.js');
+const others = require('./Functions/OthersFunctions.js');
 
 app.use(express.json())
 // Create a MongoClient with a MongoClientOptions object to set the Stable API version

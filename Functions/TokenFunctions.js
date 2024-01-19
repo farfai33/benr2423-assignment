@@ -103,6 +103,12 @@ async function FACULTYSTUDENT(req, res, next) {
                 console.log(decoded.role);
                 return res.status(401).send('Faculty and Student Access Only');
             }
+            if (decoded.role == "Student") {
+                if (decoded.studentID != req.params.student_id) {
+                    console.log(decoded.studentID, req.params.student_id);
+                    return res.status(401).send('Your own student ID only');
+                }
+            }
         }
         next();
     });
