@@ -63,7 +63,7 @@ app.post('/login', async (req, res) => {
   }
 });
 
-app.post('/admin/create-user/students', token.token.ADMIN, async (req, res) => {
+app.post('/admin/create-user/students', token.ADMIN, async (req, res) => {
   try {
     const { username, password, student_id, email, phone, PA } = req.body;
 
@@ -108,7 +108,7 @@ app.post('/admin/create-user/staff', token.ADMIN, async (req, res) => {
   }
 })
 
-app.post('/admin/create-faculty', token.token.ADMIN, async (req, res) => {
+app.post('/admin/create-faculty', token.ADMIN, async (req, res) => {
   try {
     const { name, code, program, students, session } = req.body;
 
@@ -130,7 +130,7 @@ app.post('/admin/create-faculty', token.token.ADMIN, async (req, res) => {
   }
 });
 
-app.post('/faculty/create-program', token.token.FACULTY, async (req, res) => {
+app.post('/faculty/create-program', token.FACULTY, async (req, res) => {
   try {
     const { name, code, faculty, subject, students, session } = req.body;
 
@@ -152,7 +152,7 @@ app.post('/faculty/create-program', token.token.FACULTY, async (req, res) => {
   }
 });
 
-app.post('/faculty/create-subject', token.token.FACULTY, async (req, res) => {
+app.post('/faculty/create-subject', token.FACULTY, async (req, res) => {
   try {
     const { name, code, credit, faculty, program, session } = req.body;
 
@@ -207,7 +207,7 @@ app.delete('/delete-student/:student_id', token.ADMIN, async (req, res) => {
 }
 );
 
-app.get('/view-student-list/:staff_id', token.token.FACULTY, async (req, res) => {
+app.get('/view-student-list/:staff_id', token.FACULTY, async (req, res) => {
   try {
     const list = await viewStudentListByLecturer(req.params.staff_id);
     return res.status(201).json({ Details: 'Students', list });
@@ -255,7 +255,7 @@ app.post('/report', token.FACULTYSTUDENT, async (req, res) => {
   }
 });
 
-app.patch('/faculty/update-student', token.token.FACULTY, async (req, res) => {
+app.patch('/faculty/update-student', token.FACULTY, async (req, res) => {
   const { student_id, code } = req.body;
 
   try {
