@@ -13,5 +13,5 @@ Your team is required to develop the backend solution for a attendance system. A
 diagram is shown in Figure 1. The job scopes include:  
 - [x] Design the database model using MongoDB  
 - [x] Secure the database system  
-- [ ] Develop the backend server using NodeJs to handle all the relevant RESTful API  
+- [x] Develop the backend server using NodeJs to handle all the relevant RESTful API  
 - [ ] Host the application to the Microsoft Azure Cloud  

@@ -1,6 +1,6 @@
 var jwt = require('jsonwebtoken');
 
-async function generateToken(client, userData) {
+async function generateToken(userData) {
     const token = jwt.sign(
         {
             username: userData.username,
@@ -17,24 +17,24 @@ async function generateToken(client, userData) {
 async function ADMIN(req, res, next) {
     let header = req.headers.authorization;
     if (!header) {
-      return res.status(401).send('Unauthorized');
-    }
-  
-    let token = header.split(' ')[1];
-  
-    jwt.verify(token, 'Holy', function (err, decoded) {
-      if (err) {
         return res.status(401).send('Unauthorized');
-      }
-      else {
-        console.log(decoded.role)
-        if (decoded.role != "Admin") {
-          return res.status(401).send('Admin only');
+    }
+
+    let token = header.split(' ')[1];
+
+    jwt.verify(token, 'Holy', function (err, decoded) {
+        if (err) {
+            return res.status(401).send('Unauthorized');
         }
-      }
-      next();
+        else {
+            console.log(decoded.role)
+            if (decoded.role != "Admin") {
+                return res.status(401).send('Admin only');
+            }
+        }
+        next();
     });
-  }
+}
 
 async function STUDENT(req, res, next) {
     let header = req.headers.authorization;
@@ -114,4 +114,4 @@ module.exports = {
     STUDENT,
     FACULTY,
     FACULTYSTUDENT
-}
+};
