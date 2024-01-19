@@ -62,7 +62,7 @@ app.post('/login', async (req, res) => {
     res.status(500).send('Internal Server Error');
   }
 });
-
+ 
 app.post('/admin/create-user/students', ADMIN, async (req, res) => {
   try {
     const { username, password, student_id, email, phone, PA } = req.body;
@@ -365,7 +365,7 @@ async function FACULTY(req, res, next) {
     }
     else {
       console.log(decoded);
-      if (decoded.role != "Staff") {
+      if (decoded.role != "staff") {  
         console.log(decoded.role);
         return res.status(401).send('Faculty Level Only');
       }
@@ -388,7 +388,7 @@ async function FACULTYSTUDENT(req, res, next) {
     }
     else {
       console.log(decoded);
-      if (decoded.role != "Staff" && decoded.role != "Student") {
+      if (decoded.role != "staff" && decoded.role != "Student") {
         console.log(decoded.role);
         return res.status(401).send('Faculty and Student Access Only');
       }
