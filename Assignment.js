@@ -207,12 +207,11 @@ app.get('/report/:student_id', token.FACULTYSTUDENT, async (req, res) => {
 
     if (attendanceDetails && attendanceDetails.length > 0) {
       const datesAndStatus = attendanceDetails.map(entry => ({
+        subject: entry.subject,
         date: entry.date,
         status: entry.status
       }));
-
-      console.log(datesAndStatus);
-      return res.status(200).send("Successful");
+      return res.status(200).json({ message: "Attendance details found", datesAndStatus });
     } else {
       return res.status(404).send("Attendance details not found");
     }
