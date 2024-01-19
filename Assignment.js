@@ -170,7 +170,7 @@ app.post('/faculty/create-subject', token.FACULTY, async (req, res) => {
 app.post('/students/record/:student_id', token.STUDENT, (req, res) => {
   const { subject, date, status } = req.body;
   try {
-    others.recordattendance(client, req.body.student_id, subject, date, status);
+    others.recordattendance(client, req.params.student_id, subject, date, status);
     res.status(201).send("Attendance recorded successfully");
   } catch (error) {
 
@@ -179,11 +179,9 @@ app.post('/students/record/:student_id', token.STUDENT, (req, res) => {
   }
 });
 
-app.post('/view-details', token.FACULTYSTUDENT, async (req, res) => {
-  const { student_id } = req.body;
-
+app.get('/view-details/:student_id', token.FACULTYSTUDENT, async (req, res) => {
   try {
-    const details = await view.viewDetails(client, student_id);
+    const details = await view.viewDetails(client, req.params.student_id);
     return res.status(201).json({ message: "View Details successful", details });
   } catch (error) {
     console.error(error);
