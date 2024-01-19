@@ -173,7 +173,7 @@ app.post('/faculty/create-subject', FACULTY, async (req, res) => {
   }
 });
 
-app.post('/students/record/:student_id', student, (req, res) => {
+app.post('/students/record/:student_id', student ,(req, res) => {
   const { subject, date, status } = req.body;
   try {
     recordattendance(req.body.student_id, subject, date, status);
