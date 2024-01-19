@@ -245,7 +245,7 @@ app.delete('/delete-student/:student_id', token.ADMIN, async (req, res) => {
     if (!student) {
       return res.status(404).send('Student not found');
     }
-    const result = await deleteStudent(studentID);
+    const result = await others.deleteStudent(client, studentID);
     if (result.deletedCount > 0) {
       res.status(200).send('Student data has been deleted');
     } else {
