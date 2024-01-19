@@ -6,9 +6,9 @@ const express = require('express')
 const app = express()
 const port = process.env.PORT || 3000;
 const bcrypt = require('bcrypt');
-var jwt = require('jsonwebtoken');
 
 const create = require('./Functions/CreateFunctions.js');
+const token = require('./Functions/Token.js');
 
 app.use(express.json())
 // Create a MongoClient with a MongoClientOptions object to set the Stable API version
@@ -50,7 +50,7 @@ app.post('/login', async (req, res) => {
     const passwordMatch = await bcrypt.compare(password, user.password);
     if (passwordMatch) {
       console.log('Login successful for user:', username);
-      const token = await generateToken(user);
+      const token = await token.generateToken(user);
       res.send('Login Succesful, your token is \n' + token);
     } else {
       console.log('Incorrect password for user:', username);
@@ -62,8 +62,8 @@ app.post('/login', async (req, res) => {
     res.status(500).send('Internal Server Error');
   }
 });
- 
-app.post('/admin/create-user/students', ADMIN, async (req, res) => {
+
+app.post('/admin/create-user/students', token.token.ADMIN, async (req, res) => {
   try {
     const { username, password, student_id, email, phone, PA } = req.body;
 
@@ -87,7 +87,7 @@ app.post('/admin/create-user/students', ADMIN, async (req, res) => {
 }
 );
 
-app.post('/admin/create-user/staff', ADMIN, async (req, res) => {
+app.post('/admin/create-user/staff', token.ADMIN, async (req, res) => {
   const { username, password, staff_id, email, phone } = req.body;
 
   try {
@@ -108,7 +108,7 @@ app.post('/admin/create-user/staff', ADMIN, async (req, res) => {
   }
 })
 
-app.post('/admin/create-faculty', ADMIN, async (req, res) => {
+app.post('/admin/create-faculty', token.token.ADMIN, async (req, res) => {
   try {
     const { name, code, program, students, session } = req.body;
 
@@ -130,7 +130,7 @@ app.post('/admin/create-faculty', ADMIN, async (req, res) => {
   }
 });
 
-app.post('/faculty/create-program', FACULTY, async (req, res) => {
+app.post('/faculty/create-program', token.token.FACULTY, async (req, res) => {
   try {
     const { name, code, faculty, subject, students, session } = req.body;
 
@@ -152,7 +152,7 @@ app.post('/faculty/create-program', FACULTY, async (req, res) => {
   }
 });
 
-app.post('/faculty/create-subject', FACULTY, async (req, res) => {
+app.post('/faculty/create-subject', token.token.FACULTY, async (req, res) => {
   try {
     const { name, code, credit, faculty, program, session } = req.body;
 
@@ -173,7 +173,7 @@ app.post('/faculty/create-subject', FACULTY, async (req, res) => {
   }
 });
 
-app.post('/students/record/:student_id', student ,(req, res) => {
+app.post('/students/record/:student_id', token.STUDENT, (req, res) => {
   const { subject, date, status } = req.body;
   try {
     recordattendance(req.body.student_id, subject, date, status);
@@ -185,7 +185,7 @@ app.post('/students/record/:student_id', student ,(req, res) => {
   }
 });
 
-app.delete('/delete-student/:student_id', ADMIN, async (req, res) => {
+app.delete('/delete-student/:student_id', token.ADMIN, async (req, res) => {
   const studentID = req.params.student_id;
   try {
     const student = await findStudentById(studentID);
@@ -207,10 +207,10 @@ app.delete('/delete-student/:student_id', ADMIN, async (req, res) => {
 }
 );
 
-app.get('/view-student-list/:staff_id', FACULTY,  async (req, res) => {
+app.get('/view-student-list/:staff_id', token.token.FACULTY, async (req, res) => {
   try {
     const list = await viewStudentListByLecturer(req.params.staff_id);
-    return res.status(201).json({ Details: 'Students', list});
+    return res.status(201).json({ Details: 'Students', list });
   }
   catch (error) {
     console.error(error);
@@ -218,7 +218,7 @@ app.get('/view-student-list/:staff_id', FACULTY,  async (req, res) => {
   }
 });
 
-app.post('/view-details', FACULTYSTUDENT, async (req, res) => {
+app.post('/view-details', token.FACULTYSTUDENT, async (req, res) => {
   const { student_id } = req.body;
 
   try {
@@ -231,7 +231,7 @@ app.post('/view-details', FACULTYSTUDENT, async (req, res) => {
   }
 });
 
-app.post('/report', FACULTYSTUDENT, async (req, res) => {
+app.post('/report', token.FACULTYSTUDENT, async (req, res) => {
   const { student_id } = req.body;
 
   try {
@@ -255,7 +255,7 @@ app.post('/report', FACULTYSTUDENT, async (req, res) => {
   }
 });
 
-app.patch('/faculty/update-student', FACULTY, async (req, res) => {
+app.patch('/faculty/update-student', token.token.FACULTY, async (req, res) => {
   const { student_id, code } = req.body;
 
   try {
@@ -276,7 +276,7 @@ async function recordattendance(StudentId, Subject, Date, Status) {
     // Create a user object
     const attendance = {
       student_id: StudentId,
-      subject : Subject,
+      subject: Subject,
       date: Date,
       status: Status
     };
@@ -287,28 +287,6 @@ async function recordattendance(StudentId, Subject, Date, Status) {
   catch (error) {
     console.error("Error recording attendance:", error);
   }
-}
-
-async function ADMIN(req, res, next) {
-  let header = req.headers.authorization;
-  if (!header) {
-    return res.status(401).send('Unauthorized');
-  }
-
-  let token = header.split(' ')[1];
-
-  jwt.verify(token, 'Holy', function (err, decoded) {
-    if (err) {
-      return res.status(401).send('Unauthorized');
-    }
-    else {
-      console.log(decoded.role)
-      if (decoded.role != "Admin") {
-        return res.status(401).send('Admin only');
-      }
-    }
-    next();
-  });
 }
 
 async function findStudentById(studentId) {
@@ -323,78 +301,6 @@ async function findStudentById(studentId) {
     console.error("Error finding student:", error);
     throw error;
   }
-}
-
-async function student(req, res, next) {
-  let header = req.headers.authorization;
-  if (!header) {
-    return res.status(401).send('Unauthorized');
-  }
-
-  let token = header.split(' ')[1];
-
-  jwt.verify(token, 'Holy', function (err, decoded) {
-    if (err) {
-      return res.status(401).send('Unauthorized');
-    }
-    else {
-      console.log(decoded);
-      if(decoded.role != "Student"){
-        return res.status(401).send('Student only');
-      }
-      if (decoded.studentID != req.params.student_id) {
-        console.log(decoded.studentID, req.params.student_id);
-        return res.status(401).send('Your own student ID only');
-      }
-    }
-    next();
-  });
-}
-
-async function FACULTY(req, res, next) {
-  let header = req.headers.authorization;
-  if (!header) {
-    return res.status(401).send('Unauthorized');
-  }
-
-  let token = header.split(' ')[1];
-
-  jwt.verify(token, 'Holy', function (err, decoded) {
-    if (err) {
-      return res.status(401).send('Unauthorized');
-    }
-    else {
-      console.log(decoded);
-      if (decoded.role != "staff") {  
-        console.log(decoded.role);
-        return res.status(401).send('Faculty Level Only');
-      }
-    }
-    next();
-  });
-}
-
-async function FACULTYSTUDENT(req, res, next) {
-  let header = req.headers.authorization;
-  if (!header) {
-    return res.status(401).send('Unauthorized');
-  }
-
-  let token = header.split(' ')[1];
-
-  jwt.verify(token, 'Holy', function (err, decoded) {
-    if (err) {
-      return res.status(401).send('Unauthorized');
-    }
-    else {
-      console.log(decoded);
-      if (decoded.role != "staff" && decoded.role != "Student") {
-        console.log(decoded.role);
-        return res.status(401).send('Faculty and Student Access Only');
-      }
-    }
-    next();
-  });
 }
 
 async function deleteStudent(studentId) {
@@ -511,20 +417,6 @@ async function existingfaculties(Code) {
     .collection('Faculty')
     .find({ "code": { $eq: Code } })
     .toArray();
-}
-
-async function generateToken(userData) {
-  const token = jwt.sign(
-    {
-      username: userData.username,
-      studentID: userData.student_id,
-      role: userData.role
-    },
-    'Holy',
-    { expiresIn: '1h' }
-  );
-  console.log(token);
-  return token;
 }
 
 async function addStudent(code, studentID) {
