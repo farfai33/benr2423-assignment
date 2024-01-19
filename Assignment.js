@@ -235,24 +235,22 @@ app.patch('/faculty/update-student', token.FACULTY, async (req, res) => {
   }
 });
 
-app.delete('/delete-student/:student_id', token.ADMIN, async (req, res) => {
-  const studentID = req.params.student_id;
+app.delete('/admin/delete-student/:student_id', token.ADMIN, async (req, res) => {
   try {
-    const student = await find.findStudentById(client, studentID);
+    const student = await find.findStudentById(client, req.params.student_id);
+    
     if (!student) {
       return res.status(404).send('Student not found');
     }
-    const result = await others.deleteStudent(client, studentID);
-    if (result.deletedCount > 0) {
-      res.status(200).send('Student data has been deleted');
-    } else {
-      res.status(500).send('Failed to delete student data');
-    }
+
+    others.deleteStudent(client, req.params.student_id);
+    res.status(200).send('Student deleted successfully');
   } catch (error) {
     console.error("Error deleting student data:", error);
     res.status(500).send('Internal Server Error');
   }
 });
+
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)
