@@ -50,7 +50,7 @@ app.post('/login', async (req, res) => {
     const passwordMatch = await bcrypt.compare(password, user.password);
     if (passwordMatch) {
       console.log('Login successful for user:', username);
-      const token = await token.generateToken(user);
+      const token = await token.generateToken(client, user);
       res.send('Login Succesful, your token is \n' + token);
     } else {
       console.log('Incorrect password for user:', username);
