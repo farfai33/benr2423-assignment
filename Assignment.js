@@ -200,11 +200,9 @@ app.get('/view-student-list/:staff_id', token.FACULTY, async (req, res) => {
   }
 });
 
-app.post('/report', token.FACULTYSTUDENT, async (req, res) => {
-  const { student_id } = req.body;
-
+app.get('/report/:student_id', token.FACULTYSTUDENT, async (req, res) => {
   try {
-    const details = await view.viewDetails(client, student_id);
+    const details = await view.viewDetails(client, req.params.student_id);
     const attendanceDetails = await others.report(client, details.student_id);
 
     if (attendanceDetails && attendanceDetails.length > 0) {
