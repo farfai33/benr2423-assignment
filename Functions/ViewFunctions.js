@@ -26,17 +26,76 @@ async function viewStudentListByLecturer(client, lecturerId) {
     }
 }
 
-async function viewDetails(client, StudentId) {
+async function viewDetails(client, student_id) {
     try {
         const database = client.db('AttendanceSystem');
-        const collection = database.collection('Users');
+        const usersCollection = database.collection('Users');
+        const facultiesCollection = database.collection('Faculties');
+        const programsCollection = database.collection('Programs');
+        const subjectsCollection = database.collection('Subjects');
 
-        // Find the user by username
-        const user = await collection.findOne({ student_id: { $eq: StudentId } });
+        const user = await usersCollection.findOne({ student_id });
+        if (!user) {
+            return null; // Student not found
+        }
 
-        return user;
+        const facultyDetails = await facultiesCollection.findOne({ "students.student_id": student_id });
+        const programDetails = await programsCollection.findOne({ "students.student_id": student_id });
+
+        // Aggregation pipeline for the Subjects collection
+        const aggregationPipelineSubjects = [
+            {
+                $unwind: "$student_id"
+            },
+            {
+                $match: {
+                    "student_id": student_id
+                }
+            },
+            {
+                $project: {
+                    _id: 0,
+                    name: "$name",
+                    code: "$code",
+                    credit: "$credit"
+                }
+            }
+        ];
+        
+        const subjectDetails = await subjectsCollection.aggregate(aggregationPipelineSubjects).toArray();
+
+        console.log(user);
+        console.log(subjectDetails);
+        console.log(facultyDetails);
+        console.log(programDetails);
+
+        if (!facultyDetails || !programDetails || !subjectDetails) {
+            return null; // Additional details not found
+        }
+
+        // Extract relevant details from the retrieved documents
+        const mergedDetails = {
+            username: user.username,
+            student_id: user.student_id,
+            email: user.email,
+            role: user.role,
+            phone: user.phone,
+            PA: user.PA,
+            faculty: facultyDetails.name,
+            program: {
+                name: programDetails.name,
+                code: programDetails.code,
+            },
+            subjects: subjectDetails.map(subject => ({
+                name: subject.name || null,
+                code: subject.code || null,
+                credit: subject.credit || null
+            }))
+        };
+
+        return mergedDetails;
     } catch (error) {
-        console.error('Error finding user by username:', error);
+        console.error('Error retrieving user details:', error);
         throw error;
     }
 }
