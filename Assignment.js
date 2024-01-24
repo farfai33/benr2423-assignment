@@ -179,9 +179,9 @@ app.post('/students/record/:student_id', token.STUDENT, (req, res) => {
   }
 });
 
-app.get('/view-details/:student_id', token.FACULTYSTUDENT, async (req, res) => {
+app.get('/view-details-student/:student_id', token.FACULTYSTUDENT, async (req, res) => {
   try {
-    const details = await view.viewDetails(client, req.params.student_id);
+    const details = await view.viewDetailsStudent(client, req.params.student_id);
     return res.status(201).json({ message: "View Details successful", details });
   } catch (error) {
     console.error(error);

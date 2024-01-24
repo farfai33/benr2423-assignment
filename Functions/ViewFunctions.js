@@ -26,7 +26,7 @@ async function viewStudentListByLecturer(client, lecturerId) {
     }
 }
 
-async function viewDetails(client, student_id) {
+async function viewDetailsStudent(client, student_id) {
     try {
         const database = client.db('AttendanceSystem');
         const usersCollection = database.collection('Users');
@@ -102,5 +102,5 @@ async function viewDetails(client, student_id) {
 
 module.exports = {
     viewStudentListByLecturer,
-    viewDetails
+    viewDetailsStudent
 };
