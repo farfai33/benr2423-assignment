@@ -1,0 +1,347 @@
+[
+    {
+        "username": "nurul_aziz",
+        "password": "sky1234",
+        "student_id": "B001",
+        "email": "nurul.aziz@student.com",
+        "phone": "+601234567890",
+        "PA": "PROFESOR MADYA DR NURULFAJAR BIN ABD MANAP"
+    },
+    {
+        "username": "adam_hakimi",
+        "password": "book2345",
+        "student_id": "B007",
+        "email": "adam.hakimi@student.com",
+        "phone": "+601234567896",
+        "PA": "PROFESOR MADYA DR NURULFAJAR BIN ABD MANAP"
+    },
+    {
+        "username": "rizwan_hassan",
+        "password": "river1234",
+        "student_id": "B009",
+        "email": "rizwan.hassan@student.com",
+        "phone": "+601234567898",
+        "PA": "PROFESOR MADYA DR NURULFAJAR BIN ABD MANAP"
+    },
+    {  
+        "username": "izzati_yusra",
+        "password": "matahari789",
+        "student_id" : "B333",
+        "email":"izzati.yusra@student.com",
+        "role":"Student",
+        "phone":"+601234567822",
+        "PA": "PROFESOR MADYA DR NURULFAJAR BIN ABD MANAP"
+    },
+    {  
+        "username": "din_syamsudin",
+        "password": "hujan123",
+        "student_id" : "B444",
+        "email":"din.syamsudin@student.com",
+        "role":"Student",
+        "phone":"+601234567823",
+        "PA": "PROFESOR MADYA DR NURULFAJAR BIN ABD MANAP"
+    },
+    {  
+        "username": "amara_zahida",
+        "password": "pokok123",
+        "student_id" : "B111",
+        "email":"amara.zahida@student.com",
+        "role":"Student",
+        "phone":"+601234567820",
+        "PA" : "PROFESOR MADYA DR SOO YEW GUAN"
+    },
+    {  
+        "username": "abdul_syakur",
+        "password": "bunga456",
+        "student_id" : "B222",
+        "email":"abdul.syakur@student.com",
+        "role":"Student",
+        "phone":"+601234567821",
+        "PA" : "PROFESOR MADYA DR SOO YEW GUAN"
+    },
+    {
+        "username": "aliyah_rashid",
+        "password": "ocean7890",
+        "student_id": "B002",
+        "email": "aliyah.rashid@student.com",
+        "phone": "+601234567891",
+        "PA": "PROFESOR MADYA DR SOO YEW GUAN"
+    },
+    {
+        "username": "iman_hakim",
+        "password": "mountain7890",
+        "student_id": "B005",
+        "email": "iman.hakim@student.com",
+        "phone": "+601234567894",
+        "PA": "PROFESOR MADYA DR SOO YEW GUAN"
+    },
+    {
+        "username": "rafiqah_ali",
+        "password": "garden5678",
+        "student_id": "B006",
+        "email": "rafiqah.ali@student.com",
+        "phone": "+601234567895",
+        "PA": "PROFESOR MADYA DR SOO YEW GUAN"
+    },
+    {
+        "username": "farhan_yusof",
+        "password": "tree4567",
+        "student_id": "B003",
+        "email": "farhan.yusof@student.com",
+        "phone": "+601234567892",
+        "PA": "DR. AMINAH BINTI AHMAD"
+    },
+    {
+        "username": "danial_hassan",
+        "password": "breeze7890",
+        "student_id": "B019",
+        "email": "danial.hassan@student.com",
+        "phone": "+601234567818",
+        "PA": "DR. AMINAH BINTI AHMAD"
+    },
+    {  
+        "username": "khadijah_aisyah",
+        "password": "awam456",
+        "student_id" : "B555",
+        "email":"khadijah.aisyah@student.com",
+        "role":"Student",
+        "phone":"+601234567824",
+        "PA": "DR. AMINAH BINTI AHMAD"
+    },
+    {  
+        "username": "dzulfiqar_azri",
+        "password": "langit789",
+        "student_id" : "B666",
+        "email":"dzulfiqar.azri@student.com",
+        "role":"Student",
+        "phone":"+601234567825",
+        "PA": "DR. AMINAH BINTI AHMAD"
+    },
+    {  
+        "username": "izzah_naura",
+        "password": "bumi123",
+        "student_id" : "B777",
+        "email":"izzah.naura@student.com",
+        "role":"Student",
+        "phone":"+601234567826",
+        "PA": "DR. AMINAH BINTI AHMAD"
+    },
+    {
+        "username": "aisha_ismail",
+        "password": "rain1234",
+        "student_id": "B020",
+        "email": "aisha.ismail@student.com",
+        "phone": "+601234567819",
+        "PA": "IR. TS. DR. SITI AISYAH BINTI ANAS"
+    },
+    {
+        "username": "siti_mansur",
+        "password": "apple1234",
+        "student_id": "B004",
+        "email": "siti.mansur@student.com",
+        "phone": "+601234567893",
+        "PA": "IR. TS. DR. SITI AISYAH BINTI ANAS"
+    },
+    {
+        "username": "nina_rahman",
+        "password": "cloud7890",
+        "student_id": "B008",
+        "email": "nina.rahman@student.com",
+        "phone": "+601234567897",
+        "PA": "IR. TS. DR. SITI AISYAH BINTI ANAS"
+    },
+    {
+        "username": "laila_hassan",
+        "password": "leaf5678",
+        "student_id": "B012",
+        "email": "laila.hassan@student.com",
+        "phone": "+601234567811",
+        "PA": "IR. TS. DR. SITI AISYAH BINTI ANAS"
+    },
+    {  
+        "username": "fauziah_azrul",
+        "password": "laut456",
+        "student_id" : "B888",
+        "email":"fauziah_azrul@student.com",
+        "role":"Student",
+        "phone":"+601234567827",
+        "PA": "IR. TS. DR. SITI AISYAH BINTI ANAS"
+    }
+]
+
+
+[
+    {
+        "username": "sara_jamil",
+        "password": "moon7890",
+        "student_id": "B010",
+        "email": "sara.jamil@student.com",
+        "phone": "+601234567899",
+        "PA": "TS. DR. AFIFAH MAHERAN BINTI ABDUL HAMID"
+    },
+    {
+        "username": "zainab_kadir",
+        "password": "forest4567",
+        "student_id": "B018",
+        "email": "zainab.kadir@student.com",
+        "phone": "+601234567817",
+        "PA": "TS. DR. AFIFAH MAHERAN BINTI ABDUL HAMID"
+    },
+    {  
+        "username": "fadhil_abdullah",
+        "password": "hutan890",
+        "student_id" : "B999",
+        "email":"fadhil_abdullah@student.com",
+        "role":"Student",
+        "phone":"+601234567828",
+        "PA": "TS. DR. AFIFAH MAHERAN BINTI ABDUL HAMID"
+    },
+    {  
+        "username": "fadlan_hamid",
+        "password": "bintang123",
+        "student_id" : "B112",
+        "email":"fadlan.hamid@student.com",
+        "role":"Student",
+        "phone":"+601234567829",
+        "PA": "TS. DR. AFIFAH MAHERAN BINTI ABDUL HAMID"
+    },
+    {  
+        "username": "harith_idrus",
+        "password": "daun456",
+        "student_id" : "B113",
+        "email":"harith.idrus@student.com",
+        "role":"Student",
+        "phone":"+601234567830",
+        "PA": "TS. DR. AFIFAH MAHERAN BINTI ABDUL HAMID"
+    },
+    {
+        "username": "anwar_yahya",
+        "password": "star1234",
+        "student_id": "B011",
+        "email": "anwar.yahya@student.com",
+        "phone": "+601234567810",
+        "PA": "TS. AHMAD FAIRUZ BIN MUHAMMAD AMIN"
+    },
+    {
+        "username": "ahmad_nazri",
+        "password": "sun1234",
+        "student_id": "B015",
+        "email": "ahmad.nazri@student.com",
+        "phone": "+601234567814",
+        "PA": "TS. AHMAD FAIRUZ BIN MUHAMMAD AMIN"
+    },
+    {  
+        "username": "fatimah_idris",
+        "password": "meja789",
+        "student_id" : "B114",
+        "email":"fatimah.idris@student.com",
+        "role":"Student",
+        "phone":"+601234567831",
+        "PA": "TS. AHMAD FAIRUZ BIN MUHAMMAD AMIN"
+    },
+    {  
+        "username": "husna_iskandar",
+        "password": "api123",
+        "student_id" : "B115",
+        "email":"husna.iskandar@student.com",
+        "role":"Student",
+        "phone":"+601234567832",
+        "PA": "TS. AHMAD FAIRUZ BIN MUHAMMAD AMIN"
+    },
+    {  
+        "username": "zulaikha_jamal",
+        "password": "air456",
+        "student_id" : "B116",
+        "email":"zulaikha.jamal@student.com",
+        "role":"Student",
+        "phone":"+601234567833",
+        "PA": "TS. AHMAD FAIRUZ BIN MUHAMMAD AMIN"
+    },
+    {
+        "username": "musa_ali",
+        "password": "fire2345",
+        "student_id": "B013",
+        "email": "musa.ali@student.com",
+        "phone": "+601234567812",
+        "PA": "DR. AHMAD SADHIQIN BIN MOHD ISIRA"
+    },
+    {
+        "username": "adam_yusof",
+        "password": "apple1234",
+        "student_id": "B017",
+        "email": "adam.yusof@student.com",
+        "phone": "+601234567816",
+        "PA": "DR. AHMAD SADHIQIN BIN MOHD ISIRA"
+    },
+    {  
+        "username": "laila_kamal",
+        "password": "kilat789",
+        "student_id" : "B117",
+        "email":"laila.kamal@student.com",
+        "role":"Student",
+        "phone":"+601234567834",
+        "PA": "DR. AHMAD SADHIQIN BIN MOHD ISIRA"
+    },
+    {  
+        "username": "nadia_khairul",
+        "password": "kerusi123",
+        "student_id" : "B118",
+        "email":"nadia.khairul@student.com",
+        "role":"Student",
+        "phone":"+601234567835",
+        "PA": "DR. AHMAD SADHIQIN BIN MOHD ISIRA"
+    },
+    {  
+        "username": "sofia_latif",
+        "password": "kertas456",
+        "student_id" : "B119",
+        "email":"sofia.latif@student.com",
+        "role":"Student",
+        "phone":"+601234567836",
+        "PA": "DR. AHMAD SADHIQIN BIN MOHD ISIRA"
+    },
+    {
+        "username": "zara_hakimi",
+        "password": "earth7890",
+        "student_id": "B014",
+        "email": "zara.hakimi@student.com",
+        "phone": "+601234567813",
+        "PA": "DR. ANIS SUHAILA BINTI MOHD ZAIN"
+    },
+    {
+        "username": "marina_ismail",
+        "password": "ocean7890",
+        "student_id": "B016",
+        "email": "marina.ismail@student.com",
+        "phone": "+601234567815",
+        "PA": "DR. ANIS SUHAILA BINTI MOHD ZAIN"
+    },
+    {  
+        "username": "khairul_jamal",
+        "password": "pintu789",
+        "student_id" : "B120",
+        "email":"khairul.jamal@student.com",
+        "role":"Student",
+        "phone":"+601234567837",
+        "PA": "DR. ANIS SUHAILA BINTI MOHD ZAIN"
+    },
+    {  
+        "username": "luthfi_yazid",
+        "password": "kasut123",
+        "student_id" : "B121",
+        "email":"luthfi.yazid@student.com",
+        "role":"Student",
+        "phone":"+601234567838",
+        "PA": "DR. ANIS SUHAILA BINTI MOHD ZAIN"
+    },
+    {  
+        "username": "yusri_yusuf",
+        "password": "batu456",
+        "student_id" : "B122",
+        "email":"yusri.yusuf@student.com",
+        "role":"Student",
+        "phone":"+601234567839",
+        "PA": "DR. ANIS SUHAILA BINTI MOHD ZAIN"
+    }
+
+]

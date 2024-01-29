@@ -1,0 +1,644 @@
+{
+	"info": {
+		"_postman_id": "4044fa65-e0e8-431e-b17b-12d1d8fc988a",
+		"name": "Assignment Endpoint",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "30848407"
+	},
+	"item": [
+		{
+			"name": "Admin",
+			"item": [
+				{
+					"name": "/Login Admin",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"username\":\"ADMIN\",\r\n    \"password\":\"ADMIN\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://benr2423-assignment.azurewebsites.net/login",
+							"protocol": "https",
+							"host": [
+								"benr2423-assignment",
+								"azurewebsites",
+								"net"
+							],
+							"path": [
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/Create Student",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"username\": \"nurul_aziz\",\r\n    \"password\": \"sky1234\",\r\n    \"student_id\": \"B001\",\r\n    \"email\": \"nurul.aziz@student.com\",\r\n    \"phone\": \"+601234567890\",\r\n    \"PA\": \"PROFESOR MADYA DR NURULFAJAR BIN ABD MANAP\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://benr2423-assignment.azurewebsites.net/admin/create-user/students",
+							"protocol": "https",
+							"host": [
+								"benr2423-assignment",
+								"azurewebsites",
+								"net"
+							],
+							"path": [
+								"admin",
+								"create-user",
+								"students"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/Create Staff",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"username\": \"DR. ANIS SUHAILA BINTI MOHD ZAIN\",\r\n    \"password\": \"hallx1234\",\r\n    \"staff_id\": \"S008\",\r\n    \"email\": \"anissuhaila@staff.com\",\r\n    \"phone\": \"+601111199999\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://benr2423-assignment.azurewebsites.net/admin/create-user/staff",
+							"protocol": "https",
+							"host": [
+								"benr2423-assignment",
+								"azurewebsites",
+								"net"
+							],
+							"path": [
+								"admin",
+								"create-user",
+								"staff"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/Create Faculty",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"FAKULTI TEKNOLOGI DAN KEJURUTERAAN ELEKTRONIK DAN KOMPUTER\",\r\n    \"code\": \"FTKEK\",\r\n    \"program\": {\r\n        \"Program\": [\r\n            \"BERR\", \"BERG\"\r\n        ]\r\n    },\r\n    \"students\": {\r\n        \"student_id\": [\r\n            \"B001\", \"B007\", \"B009\", \"B333\", \"B444\", \"B111\", \"B222\", \"B002\", \"B005\", \"B006\", \"B003\", \"B019\", \"B555\", \"B666\", \"B777\", \"B020\", \"B004\", \"B008\", \"B012\", \"B888\"\r\n        ]\r\n    },\r\n    \"session\": {\r\n        \"Session\": [\r\n            \"1-2023/2024\", \"2-2023/2024\"\r\n        ]\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://benr2423-assignment.azurewebsites.net/admin/create-faculty",
+							"protocol": "https",
+							"host": [
+								"benr2423-assignment",
+								"azurewebsites",
+								"net"
+							],
+							"path": [
+								"admin",
+								"create-faculty"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/Delete Student",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkFETUlOIiwicm9sZSI6IkFkbWluIiwiaWF0IjoxNzA1Njc2MjgwLCJleHAiOjE3MDU2Nzk4ODB9.d9DdEzkYE_jCFhOnfetENt7YdcaHVY3SfMJy3dCXoBo",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://benr2423-assignment.azurewebsites.net/admin/delete-student/B005",
+							"protocol": "https",
+							"host": [
+								"benr2423-assignment",
+								"azurewebsites",
+								"net"
+							],
+							"path": [
+								"admin",
+								"delete-student",
+								"B005"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Faculty",
+			"item": [
+				{
+					"name": "/Login Staff",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"username\": \"PROFESOR MADYA DR NURULFAJAR BIN ABD MANAP\",\r\n    \"password\": \"hallo1234\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://benr2423-assignment.azurewebsites.net/login",
+							"protocol": "https",
+							"host": [
+								"benr2423-assignment",
+								"azurewebsites",
+								"net"
+							],
+							"path": [
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/Create Program",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"BACHELOR OF COMPUTER ENGINEERING WITH HONOURS\",\r\n    \"code\": \"BERR\",\r\n    \"faculty\": \"FTKEK\",\r\n    \"subject\": {\r\n        \"Subject\": [\r\n            \"BENR2423\", \"BENR2333\"\r\n        ]\r\n    },\r\n    \"students\": {\r\n        \"student_id\": [\r\n            \"B001\", \"B007\", \"B009\", \"B333\", \"B444\", \"B111\", \"B222\", \"B002\", \"B005\", \"B006\"\r\n        ]\r\n    },\r\n    \"session\": {\r\n        \"Session\": [\r\n            \"1-2023/2024\", \"2-2023/2024\"\r\n        ]\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://benr2423-assignment.azurewebsites.net/faculty/create-program",
+							"protocol": "https",
+							"host": [
+								"benr2423-assignment",
+								"azurewebsites",
+								"net"
+							],
+							"path": [
+								"faculty",
+								"create-program"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/Create Subject",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"COMMUNICATION PRINCIPLES\",\r\n    \"code\": \"BENT3753\",\r\n    \"credit\": \"3\",\r\n    \"faculty\": \"FTKEK\",\r\n    \"program\": \"BERG\",\r\n    \"session\": \"1-2023/2024\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://benr2423-assignment.azurewebsites.net/faculty/create-subject",
+							"protocol": "https",
+							"host": [
+								"benr2423-assignment",
+								"azurewebsites",
+								"net"
+							],
+							"path": [
+								"faculty",
+								"create-subject"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/Report",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"student_id\":\"B001\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://benr2423-assignment.azurewebsites.net/report",
+							"protocol": "https",
+							"host": [
+								"benr2423-assignment",
+								"azurewebsites",
+								"net"
+							],
+							"path": [
+								"report"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/View Student List",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://benr2423-assignment.azurewebsites.net/view-student-list/S001",
+							"protocol": "https",
+							"host": [
+								"benr2423-assignment",
+								"azurewebsites",
+								"net"
+							],
+							"path": [
+								"view-student-list",
+								"S001"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/View Details",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Im51cnVsX2F6aXoiLCJzdHVkZW50SUQiOiJCMDAxIiwicm9sZSI6IlN0dWRlbnQiLCJpYXQiOjE3MDU2NzQ4NjMsImV4cCI6MTcwNTY3ODQ2M30.fGYZjOFBW30RrheUE5AjJ3zRlJ2Uoz4hDvHvo5203LI",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://benr2423-assignment.azurewebsites.net/view-details/B001",
+							"protocol": "https",
+							"host": [
+								"benr2423-assignment",
+								"azurewebsites",
+								"net"
+							],
+							"path": [
+								"view-details",
+								"B001"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/Update Student",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IlBST0ZFU09SIE1BRFlBIERSIE5VUlVMRkFKQVIgQklOIEFCRCBNQU5BUCIsInJvbGUiOiJzdGFmZiIsImlhdCI6MTcwNTY3NTEwOSwiZXhwIjoxNzA1Njc4NzA5fQ.Hsmkag0xlUhUSGEP38AHOa18Zzu5D-Pyh5jJX_0XAGc",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"code\":\"BENT3753\",\r\n    \"student_id\":[\r\n        \"B003\", \"B019\", \"B555\", \"B666\", \"B777\"\r\n    ]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://benr2423-assignment.azurewebsites.net/faculty/update-student",
+							"protocol": "https",
+							"host": [
+								"benr2423-assignment",
+								"azurewebsites",
+								"net"
+							],
+							"path": [
+								"faculty",
+								"update-student"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/Report Attendance",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Im51cnVsX2F6aXoiLCJzdHVkZW50SUQiOiJCMDAxIiwicm9sZSI6IlN0dWRlbnQiLCJpYXQiOjE3MDU2NzY2NzQsImV4cCI6MTcwNTY4MDI3NH0.TkyrqEGpys8Bjn0WCXR1fs-bbzN0MAfU46DV4hc4d1A",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://benr2423-assignment.azurewebsites.net/report/B001",
+							"protocol": "https",
+							"host": [
+								"benr2423-assignment",
+								"azurewebsites",
+								"net"
+							],
+							"path": [
+								"report",
+								"B001"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Student",
+			"item": [
+				{
+					"name": "/Login Student",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"username\":\"nurul_aziz\",\r\n    \"password\":\"sky1234\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://benr2423-assignment.azurewebsites.net/login",
+							"protocol": "https",
+							"host": [
+								"benr2423-assignment",
+								"azurewebsites",
+								"net"
+							],
+							"path": [
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/Report",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"student_id\":\"B001\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://benr2423-assignment.azurewebsites.net/report",
+							"protocol": "https",
+							"host": [
+								"benr2423-assignment",
+								"azurewebsites",
+								"net"
+							],
+							"path": [
+								"report"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/View Details",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Im51cnVsX2F6aXoiLCJzdHVkZW50SUQiOiJCMDAxIiwicm9sZSI6IlN0dWRlbnQiLCJpYXQiOjE3MDU2NzQ4NjMsImV4cCI6MTcwNTY3ODQ2M30.fGYZjOFBW30RrheUE5AjJ3zRlJ2Uoz4hDvHvo5203LI",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://benr2423-assignment.azurewebsites.net/view-details/B001",
+							"protocol": "https",
+							"host": [
+								"benr2423-assignment",
+								"azurewebsites",
+								"net"
+							],
+							"path": [
+								"view-details",
+								"B001"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/Record Attendance",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Im51cnVsX2F6aXoiLCJzdHVkZW50SUQiOiJCMDAxIiwicm9sZSI6IlN0dWRlbnQiLCJpYXQiOjE3MDU2NzY2NzQsImV4cCI6MTcwNTY4MDI3NH0.TkyrqEGpys8Bjn0WCXR1fs-bbzN0MAfU46DV4hc4d1A",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"subject\":\"BENR2423\",\r\n    \"date\":\"29/1/2024\",\r\n    \"status\":\"present\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://benr2423-assignment.azurewebsites.net/students/record/B001",
+							"protocol": "https",
+							"host": [
+								"benr2423-assignment",
+								"azurewebsites",
+								"net"
+							],
+							"path": [
+								"students",
+								"record",
+								"B001"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/Report Attendance",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Im51cnVsX2F6aXoiLCJzdHVkZW50SUQiOiJCMDAxIiwicm9sZSI6IlN0dWRlbnQiLCJpYXQiOjE3MDU2NzY2NzQsImV4cCI6MTcwNTY4MDI3NH0.TkyrqEGpys8Bjn0WCXR1fs-bbzN0MAfU46DV4hc4d1A",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://benr2423-assignment.azurewebsites.net/report/B001",
+							"protocol": "https",
+							"host": [
+								"benr2423-assignment",
+								"azurewebsites",
+								"net"
+							],
+							"path": [
+								"report",
+								"B001"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
